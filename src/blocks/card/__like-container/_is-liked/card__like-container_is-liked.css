@@ -1,0 +1,4 @@
+﻿.card__like-container_is-liked {
+  transform: translate(0, 0);
+  transition: transform cubic-bezier(0, 0.6, 0.82, 1.03) 0.3s;
+}

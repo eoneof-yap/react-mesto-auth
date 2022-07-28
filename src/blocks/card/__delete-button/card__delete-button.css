@@ -1,0 +1,16 @@
+﻿.card__delete-button {
+  width: 48px;
+  height: 49px;
+  /* ↑ увеличиваем кликабельную область кнопки */
+  /* ↓ сохраняя размеры */
+  background-size: 18px 19px;
+  background-image: url("../../../images/deleteButton.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: 0;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 1;
+}

@@ -1,0 +1,12 @@
+﻿.profile__photo-container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .profile__photo-container {
+    flex-direction: column;
+  }
+}

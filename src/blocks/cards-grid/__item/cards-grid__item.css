@@ -1,0 +1,11 @@
+﻿.cards-grid__item {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .cards-grid__item {
+    margin-bottom: 6px;
+  }
+}

@@ -1,0 +1,9 @@
+﻿.card__label {
+  padding: 20px 20px 21px 21px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 0 0 10px 10px;
+}

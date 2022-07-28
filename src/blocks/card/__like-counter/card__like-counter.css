@@ -1,0 +1,12 @@
+﻿.card__like-counter {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  color: #000;
+  margin: 3px 0 0 0;
+  opacity: 0;
+  transition: opacity cubic-bezier(0, 0.6, 0.82, 1.03) 0.1s;
+  transition-delay: 0.3s;
+}

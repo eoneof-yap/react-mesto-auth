@@ -1,0 +1,8 @@
+﻿.card__like-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(0, 10px);
+  transition: transform cubic-bezier(0, 0.6, 0.82, 1.03) 0.3s;
+  transition-delay: 0.3s;
+}

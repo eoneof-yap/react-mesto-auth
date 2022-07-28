@@ -1,0 +1,15 @@
+﻿.form__fieldset {
+  margin: 0 0 25px 0;
+  padding: 0;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+@media (max-width: 375px) {
+  .form__fieldset {
+    margin: 0 0 22px 0;
+  }
+}
