@@ -130,6 +130,7 @@ export default function App() {
     setIsUpdatePopupOpen(false);
     setIsEditPopupOpen(false);
     setIsAddPopoupOpen(false);
+    // TODO remove artifacts when img src removes faster than css transition ends so close button is still visible a small amount of time
     setIsImageViewPopupOpen(false);
     setIsConfirmPopupOpen(false);
 
