@@ -22,6 +22,9 @@
 @import url("./blocks/header/__logo/header__logo.css");
 @import url("./blocks/divider/divider.css");
 
+/* LOGIN SCREEN */
+@import url("./blocks/login/login.css");
+
 /* PROFILE */
 @import url("./blocks/profile/profile.css");
 @import url("./blocks/profile/__container/profile__container.css");
@@ -35,9 +38,6 @@
 @import url("./blocks/profile/__about/profile__about.css");
 @import url("./blocks/profile/__edit-button/profile__edit-button.css");
 @import url("./blocks/profile/__add-button/profile__add-button.css");
-
-/* FORM */
-@import url("./blocks/form/form.css");
 
 /* POPUP */
 @import url("./blocks/popup/popup.css");
@@ -55,6 +55,7 @@
 @import url("./blocks/form/__input/form__input.css");
 @import url("./blocks/form/__input/_type/form__input_type_error.css");
 @import url("./blocks/form/__submit-button/form__submit-button.css");
+@import url("./blocks/form/_place/form_place_auth.css");
 @import url("./blocks/button/_disabled/button_disabled.css");
 
 /* ERROR HINTS */

@@ -12,6 +12,8 @@ import AddPlacePopup from './popups/AddPlacePopup.js';
 import ImagePopup from './popups/ImagePopup.js';
 import PopupConfirm from './popups/PopupConfirm.js';
 import Card from './Card.js';
+import Login from './Login.js';
+import Register from './Register.js';
 import Api from '../utils/Api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
@@ -167,6 +169,8 @@ export default function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
         <Header />
+        <Login />
+        <Register />
         <Main
           allDataIsLoaded={allDataIsLoaded}
           preloaderComponent={<Preloader />}

@@ -1,6 +1,5 @@
 import { useContext, cloneElement } from 'react';
 
-import avatarPlaceHolderImage from '../images/avatar-placeholder.svg';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 export default function Main(props) {

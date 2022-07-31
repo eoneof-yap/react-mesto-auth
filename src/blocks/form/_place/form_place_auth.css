@@ -1,0 +1,72 @@
+.auth {
+  margin: 0;
+  padding: 60px 0 80px;
+  width: clamp(260px, 100%, 358px);
+}
+
+/* TODO sort to bem structure */
+.form_place_auth {
+  padding: 0;
+  background-color: #000000;
+}
+
+.form__header_on-dark {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 43px;
+}
+
+.form__fieldset_on-dark {
+  margin-bottom: 193px;
+}
+
+@media (max-width: 450px) {
+  .form__fieldset_on-dark {
+    margin-bottom: 173px;
+  }
+}
+
+.form__input_on-dark {
+  border-bottom: 2px solid #cccccc;
+  color: #fff;
+}
+
+.form__input_on-dark:focus {
+  border-bottom: 2px solid #fff;
+}
+
+.form__input_on-dark::placeholder {
+  color: #cccccc;
+}
+
+.form__submit-button_white {
+  background-color: #fff;
+  color: #000;
+  height: 50px;
+}
+
+.form__submit-button_white:hover {
+  opacity: 0.85;
+}
+
+.form__link {
+  margin: 15px 0 0;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  font-weight: 400;
+}
+
+.form__link_link {
+  opacity: 0.85;
+  color: #a9a9a9;
+  margin-left: 5px;
+}
+
+.form__link_link:hover {
+  color: #fff;
+}
+
+.link:hover {
+  cursor: pointer;
+}
