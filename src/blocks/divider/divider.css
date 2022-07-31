@@ -2,23 +2,31 @@
   position: absolute;
   background-color: #545454;
   opacity: 0.7;
-  width: calc(100% - 54px);
-  max-width: 880px;
   height: 1px;
-  top: 118px;
+  width: 100%;
+  bottom: 0;
   left: 50%;
   transform: translate(-50%);
 }
 
-@media (max-width: 450px) {
+@media (max-width: 375px) {
   .divider {
-    width: 100%;
-    top: 91px;
+    width: 375px;
   }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 320px) {
   .divider {
-    top: 83px;
+    width: 320px;
+  }
+}
+
+.divider_top {
+  display: none;
+}
+
+@media (max-width: 450px) {
+  .divider_top {
+    display: block;
   }
 }

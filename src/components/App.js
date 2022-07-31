@@ -171,7 +171,7 @@ export default function App() {
         <Header />
         <Login />
         <Register />
-        <Main
+        {/* <Main
           allDataIsLoaded={allDataIsLoaded}
           preloaderComponent={<Preloader />}
           // page buttons
@@ -184,7 +184,7 @@ export default function App() {
           onCardLike={handleCardLike}
           onCardThumbClick={openImageViewPopup}
           onDeleteButtonClick={openConfirmDeletePopup}
-        />
+        /> */}
         <Footer />
         <EditAvatarPopup
           isOpen={isUpdatePopupOpen}
