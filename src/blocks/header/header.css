@@ -18,3 +18,32 @@
     width: calc(100% - 14px);
   }
 }
+
+.header__menu {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.header__email {
+  font-size: 18px;
+  line-height: 1.222;
+  font-weight: 500;
+}
+
+.header__link {
+  color: #a9a9a9;
+  margin-left: 24px;
+  font-size: 18px;
+  line-height: 1.222;
+}
+
+.header__link:hover {
+  color: #fff;
+}
+
+.header__burger-icon {
+  background-image: ;
+}
