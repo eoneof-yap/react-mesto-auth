@@ -1,0 +1,14 @@
+.header__left {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 450px) {
+  .header__left {
+    margin: 26px 0 0;
+  }
+}

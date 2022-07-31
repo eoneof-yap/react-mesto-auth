@@ -5,7 +5,7 @@ export default function Login() {
     <section className='auth'>
       <form
         className='form form_place_auth'
-        id='login'
+        id='register'
         name='login'
         action='login'>
         <h2 className='form__header form__header_on-dark'>Регистрация</h2>

@@ -20,13 +20,3 @@
     width: 320px;
   }
 }
-
-.divider_top {
-  display: none;
-}
-
-@media (max-width: 450px) {
-  .divider_top {
-    display: block;
-  }
-}

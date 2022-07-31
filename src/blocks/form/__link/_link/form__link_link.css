@@ -1,0 +1,9 @@
+.form__link_link {
+  opacity: 0.85;
+  color: #a9a9a9;
+  margin-left: 5px;
+}
+
+.form__link_link:hover {
+  color: #fff;
+}

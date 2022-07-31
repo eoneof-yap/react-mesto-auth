@@ -1,0 +1,17 @@
+.header__menu-button {
+  border: none;
+  margin: 4px 4px 0;
+  width: 24px;
+  height: 21px;
+  /* background-image: url("../../images/burger-menu-icon.svg"); */
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: none;
+}
+
+@media (max-width: 450px) {
+  .header__menu-button {
+    display: block;
+  }
+}
