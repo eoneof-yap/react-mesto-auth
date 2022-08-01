@@ -6,14 +6,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
 }
 
 @media (max-width: 450px) {
   .header__menu {
-    margin: 0 auto;
-    display: flex;
+    z-index: -1;
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
     flex-direction: column;
-    justify-items: center;
-    padding: 13px 0 40px;
+    align-items: center;
+    justify-content: center;
+    transition: all cubic-bezier(0, 0.6, 0.82, 1.03) 0.2s, opacity 0s;
   }
 }

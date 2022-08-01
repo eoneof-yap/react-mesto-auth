@@ -22,13 +22,13 @@
 
 /* HEADER */
 @import url("./blocks/header/header.css");
+@import url("./blocks/header/__actions/header__actions.css");
 @import url("./blocks/header/__logo/header__logo.css");
-@import url("./blocks/header/__left/header__left.css");
-@import url("./blocks/header/__right/header__right.css");
+@import url("./blocks/header/__menu-button/header__menu-button.css");
 @import url("./blocks/header/__menu/header__menu.css");
+@import url("./blocks/header/__menu/_mobile/header__menu_mobile.css");
 @import url("./blocks/header/__email/header__email.css");
 @import url("./blocks/header/__link/header__link.css");
-@import url("./blocks/header/__menu-button/header__menu-button.css");
 @import url("./blocks/divider/divider.css");
 @import url("./blocks/divider/_top/divider_top.css");
 
