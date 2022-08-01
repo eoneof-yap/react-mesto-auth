@@ -1,7 +1,13 @@
 ﻿.form {
+  width: clamp(300px, 95vw, 430px);
   padding: 34px 36px 40px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  background-color: #fff;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  z-index: 2;
+  border: 0;
 }
