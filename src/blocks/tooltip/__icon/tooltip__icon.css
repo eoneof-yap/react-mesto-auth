@@ -1,0 +1,8 @@
+.tooltip__icon {
+  margin: 0 auto;
+  min-width: 120px;
+  min-height: 120px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}

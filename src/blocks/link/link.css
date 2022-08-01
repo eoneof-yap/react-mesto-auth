@@ -1,4 +1,11 @@
+.link {
+  opacity: 1;
+  transition: opacity cubic-bezier(0, 0.6, 0.82, 1.03) 1s;
+}
+
 .link:hover {
   text-decoration: none;
   cursor: pointer;
+  opacity: 0.6;
+  transition: opacity cubic-bezier(0, 0.6, 0.82, 1.03) 0.3s;
 }

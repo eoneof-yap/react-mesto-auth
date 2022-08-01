@@ -11,6 +11,7 @@ import EditProfilePopup from './popups/EditProfilePopup.js';
 import AddPlacePopup from './popups/AddPlacePopup.js';
 import ImagePopup from './popups/ImagePopup.js';
 import PopupConfirm from './popups/PopupConfirm.js';
+import InfoTooltip from './InfoTooltip .js';
 import Card from './Card.js';
 import Login from './Login.js';
 import Register from './Register.js';
@@ -29,6 +30,7 @@ export default function App() {
   const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
   const [isImageViewPopupOpen, setIsImageViewPopupOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
 
   // pass to ImagePopup
   const [selectedCard, setSelectedCard] = useState({
@@ -135,8 +137,13 @@ export default function App() {
     // TODO remove artifacts when img src removes faster than css transition ends so close button is still visible a small amount of time
     setIsImageViewPopupOpen(false);
     setIsConfirmPopupOpen(false);
+    setIsInfoToolTipOpen(false);
 
     setSelectedCard({ name: '', link: '', _id: '' });
+  }
+
+  function openInfoToolTip() {
+    setIsInfoToolTipOpen(true);
   }
 
   function openUpdateAvatarPopup() {
@@ -169,8 +176,8 @@ export default function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
         <Header />
-        <Login />
-        <Register />
+        {/* <Login onSubmitError={openInfoToolTip} /> */}
+        <Register onSubmitError={openInfoToolTip} />
         {/* <Main
           allDataIsLoaded={allDataIsLoaded}
           preloaderComponent={<Preloader />}
@@ -186,6 +193,7 @@ export default function App() {
           onDeleteButtonClick={openConfirmDeletePopup}
         /> */}
         <Footer />
+        <InfoTooltip isOpen={isInfoToolTipOpen} onClose={closeAllPopups} />
         <EditAvatarPopup
           isOpen={isUpdatePopupOpen}
           onClose={closeAllPopups}

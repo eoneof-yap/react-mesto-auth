@@ -1,5 +1,5 @@
 .form_place_auth {
   padding: 0;
   background-color: #000000;
-  width: clamp(260px, 100%, 358px);
+  width: min(calc(100vw - 60px), 358px);
 }

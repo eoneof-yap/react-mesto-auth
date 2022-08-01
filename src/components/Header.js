@@ -32,10 +32,8 @@ function Header() {
       </div>
       <div className={`header__menu ${visibleMenuClass}`}>
         <div className='divider divider_top'></div>
-        <div className='header__email'>
-          <span>email@mail.com</span>
-        </div>
-        <a className='link header__link'>Выйти</a>
+        <div className='header__email'>{/* <span>email@mail.com</span> */}</div>
+        <a className='link header__link'>Регистрация</a>
       </div>
       <div className='divider'></div>
     </header>

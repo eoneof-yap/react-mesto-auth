@@ -56,6 +56,9 @@
 @import url("./blocks/popup/__close-button/popup__close-button.css");
 @import url("./blocks/popup/__backdrop/popup__backdrop.css");
 @import url("./blocks/popup/__backdrop/_place/popup__backdrop_place_preview.css");
+@import url("./blocks/tooltip/tooltip.css");
+@import url("./blocks/tooltip/__icon/tooltip__icon.css");
+@import url("./blocks/tooltip/__title/tooltip__title.css");
 
 /* FORM */
 @import url("./blocks/form/form.css");
