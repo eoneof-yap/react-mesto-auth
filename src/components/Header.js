@@ -6,7 +6,10 @@ import menuButtonIcon from '../images/burger-menu-icon.svg';
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const hiddenClassName = `${isMenuOpen ? 'header__menu_mobile' : ''}`;
+  const visibleMenuClass = isMenuOpen ? `${'header__menu_mobile'}` : '';
+  const menuButtonBgImage = isMenuOpen
+    ? `url(${closeButtonIcon})`
+    : `url(${menuButtonIcon})`;
 
   function handleMenuButtonClick() {
     setIsMenuOpen(!isMenuOpen);
@@ -23,13 +26,11 @@ function Header() {
           title='Меню'
           onClick={handleMenuButtonClick}
           style={{
-            backgroundImage: isMenuOpen
-              ? `url(${closeButtonIcon})`
-              : `url(${menuButtonIcon})`,
+            backgroundImage: `${menuButtonBgImage}`,
           }}
         />
       </div>
-      <div className={`header__menu ${hiddenClassName}`}>
+      <div className={`header__menu ${visibleMenuClass}`}>
         <div className='divider divider_top'></div>
         <div className='header__email'>
           <span>email@mail.com</span>
