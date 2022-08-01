@@ -3,11 +3,7 @@ import React from 'react';
 export default function Login() {
   return (
     <section className='auth'>
-      <form
-        className='form form_place_auth'
-        id='login'
-        name='login'
-        action='login'>
+      <form className='form form_place_auth' id='login' name='login' action='login'>
         <h2 className='form__header form__header_on-dark'>Вход</h2>
         <fieldset className='form__fieldset form__fieldset_on-dark'>
           <div className='form__input-container'>
@@ -16,7 +12,8 @@ export default function Login() {
               placeholder='Email'
               name='email'
               type='email'
-              required 
+              required
+              autoComplete='email'
             />
           </div>
           <div className='form__input-container'>
@@ -27,6 +24,7 @@ export default function Login() {
               type='password'
               minLength='8'
               required
+              autoComplete='current-password'
             />
           </div>
         </fieldset>
