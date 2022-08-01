@@ -30,6 +30,7 @@
 @import url("./blocks/header/__link/header__link.css");
 @import url("./blocks/header/__menu-button/header__menu-button.css");
 @import url("./blocks/divider/divider.css");
+@import url("./blocks/divider/_top/divider_top.css");
 
 /* LOGIN SCREEN */
 @import url("./blocks/login/login.css");
