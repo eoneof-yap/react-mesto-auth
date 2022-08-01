@@ -1,14 +1,15 @@
 .header__left {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 
 @media (max-width: 450px) {
   .header__left {
-    margin: 26px 0 0;
+    padding: 26px 0 0;
   }
 }
