@@ -16,20 +16,16 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 export default function App() {
   // show only header and spinner until data is fetched
   const [allDataIsLoaded, setAllDataIsLoaded] = useState(false);
-
   const [currentUser, setCurrentUser] = useState({});
-  const [cardsList, setCardsList] = useState([]);
-
-  const [isAddPopupOpen, setIsAddPopoupOpen] = useState(false);
-  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
-  const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
-  const [isImageViewPopupOpen, setIsImageViewPopupOpen] = useState(false);
-  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
-  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
-  // pass to ImagePopup
-  const [selectedCard, setSelectedCard] = useState({
-    name: '',
-    link: '',
+  const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
+  const [selectedCard, setSelectedCard] = useState({});
+  const [isOpen, setIsOpen] = useState({
+    updateAvatar: false,
+    editProfile: false,
+    addCard: false,
+    viewImage: false,
+    confirmDelete: false,
+    tooltip: false,
   });
 
   const api = new Api(consts.apiConfig);
@@ -95,7 +91,6 @@ export default function App() {
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((liker) => liker._id === currentUser._id);
-
     api
       .toggleCardLike(card._id, isLiked)
       .then((newCard) => {
@@ -125,15 +120,11 @@ export default function App() {
   }
 
   function closeAllPopups() {
-    // TODO try 'react-transition-group'
-    setIsUpdatePopupOpen(false);
-    setIsEditPopupOpen(false);
-    setIsAddPopoupOpen(false);
-    setIsImageViewPopupOpen(false);
-    setIsConfirmPopupOpen(false);
-    setIsInfoToolTipOpen(false);
-
-    setSelectedCard({ name: '', link: '', _id: '' });
+    Object.keys(isOpen).forEach((key) => {
+      isOpen[key] = false;
+    });
+    setIsOpen(isOpen);
+    setSelectedCard({});
   }
 
   // function openInfoToolTip() {
@@ -141,24 +132,24 @@ export default function App() {
   // }
 
   function openUpdateAvatarPopup() {
-    setIsUpdatePopupOpen(true);
+    setIsOpen({ updateAvatar: true });
   }
 
   function openEditProfilePopup() {
-    setIsEditPopupOpen(true);
+    setIsOpen({ editProfile: true });
   }
 
   function openNewCardPopup() {
-    setIsAddPopoupOpen(true);
+    setIsOpen({ addCard: true });
   }
 
   function openConfirmDeletePopup(cardData) {
-    setIsConfirmPopupOpen(true);
+    setIsOpen({ confirmDelete: true });
     setSelectedCard(cardData);
   }
 
   function openImageViewPopup(cardData) {
-    setIsImageViewPopupOpen(true);
+    setIsOpen({ viewImage: true });
     setSelectedCard(cardData);
   }
 
@@ -188,21 +179,14 @@ export default function App() {
         />
         <Footer />
         <Popups
-          // opened states
-          isUpdatePopupOpen={isUpdatePopupOpen}
-          isEditPopupOpen={isEditPopupOpen}
-          isAddPopupOpen={isAddPopupOpen}
-          isImageViewPopupOpen={isImageViewPopupOpen}
-          isConfirmPopupOpen={isConfirmPopupOpen}
-          isInfoToolTipOpen={isInfoToolTipOpen}
-          // actions
+          isOpen={isOpen}
+          selectedCard={selectedCard}
+          // handlers
           onSubmitCardDelete={handleCardDelete}
           onSubmitAvatar={handleAvatarSubmit}
           onSubmitUser={handleUserInfoSubmit}
-          onNewPlaceSubmit={handleNewPlaceSubmit}
+          onSubmitNewPlace={handleNewPlaceSubmit}
           onClose={closeAllPopups}
-          // other
-          selectedCard={selectedCard}
         />
       </div>
     </CurrentUserContext.Provider>
