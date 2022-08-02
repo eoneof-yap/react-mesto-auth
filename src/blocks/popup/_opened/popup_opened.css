@@ -1,6 +1,29 @@
-﻿.popup_opened {
+﻿/* .popup_opened {
   display: flex;
   visibility: visible;
   opacity: 1;
   transition: opacity 0s, 0.25s ease-in;
+} */
+
+.popup_opened-enter {
+  opacity: 0;
+  transition: opacity 0s, 0.25s ease-out;
+}
+.popup_opened-enter-active {
+  opacity: 1;
+  display: flex;
+  transition: opacity 0s, 0.25s ease-in;
+}
+.popup_opened-exit {
+  display: flex;
+  opacity: 1;
+}
+.popup_opened-exit-active {
+  opacity: 0;
+  transition: opacity 0s, 0.25s ease-in;
+}
+
+.popup_opened-enter-done {
+  display: flex;
+  opacity: 1;
 }
