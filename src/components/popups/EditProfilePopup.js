@@ -28,7 +28,7 @@ export default function EditProfilePopup(props) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    props.onSubmitUser(values);
+    props.onSubmit(values);
     setInitialValues();
   }
 

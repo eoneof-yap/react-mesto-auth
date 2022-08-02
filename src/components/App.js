@@ -6,15 +6,10 @@ import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import Preloader from './Preloader.js';
-import EditAvatarPopup from './popups/EditAvatarPopup.js';
-import EditProfilePopup from './popups/EditProfilePopup.js';
-import AddPlacePopup from './popups/AddPlacePopup.js';
-import ImagePopup from './popups/ImagePopup.js';
-import PopupConfirm from './popups/PopupConfirm.js';
-import InfoTooltip from './InfoTooltip .js';
+import Popups from './Popups.js';
 import Card from './Card.js';
-import Login from './Login.js';
-import Register from './Register.js';
+// import Login from './Login.js';
+// import Register from './Register.js';
 import Api from '../utils/Api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
@@ -31,7 +26,6 @@ export default function App() {
   const [isImageViewPopupOpen, setIsImageViewPopupOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
   const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
-
   // pass to ImagePopup
   const [selectedCard, setSelectedCard] = useState({
     name: '',
@@ -131,10 +125,10 @@ export default function App() {
   }
 
   function closeAllPopups() {
+    // TODO try 'react-transition-group'
     setIsUpdatePopupOpen(false);
     setIsEditPopupOpen(false);
     setIsAddPopoupOpen(false);
-    // TODO remove artifacts when img src removes faster than css transition ends so close button is still visible a small amount of time
     setIsImageViewPopupOpen(false);
     setIsConfirmPopupOpen(false);
     setIsInfoToolTipOpen(false);
@@ -142,9 +136,9 @@ export default function App() {
     setSelectedCard({ name: '', link: '', _id: '' });
   }
 
-  function openInfoToolTip() {
-    setIsInfoToolTipOpen(true);
-  }
+  // function openInfoToolTip() {
+  //   setIsInfoToolTipOpen(true);
+  // }
 
   function openUpdateAvatarPopup() {
     setIsUpdatePopupOpen(true);
@@ -177,8 +171,8 @@ export default function App() {
       <div className='page'>
         <Header />
         {/* <Login onSubmitError={openInfoToolTip} /> */}
-        <Register onSubmitError={openInfoToolTip} />
-        {/* <Main
+        {/* <Register onSubmitError={openInfoToolTip} /> */}
+        <Main
           allDataIsLoaded={allDataIsLoaded}
           preloaderComponent={<Preloader />}
           // page buttons
@@ -191,34 +185,24 @@ export default function App() {
           onCardLike={handleCardLike}
           onCardThumbClick={openImageViewPopup}
           onDeleteButtonClick={openConfirmDeletePopup}
-        /> */}
+        />
         <Footer />
-        <InfoTooltip isOpen={isInfoToolTipOpen} onClose={closeAllPopups} />
-        <EditAvatarPopup
-          isOpen={isUpdatePopupOpen}
-          onClose={closeAllPopups}
+        <Popups
+          // opened states
+          isUpdatePopupOpen={isUpdatePopupOpen}
+          isEditPopupOpen={isEditPopupOpen}
+          isAddPopupOpen={isAddPopupOpen}
+          isImageViewPopupOpen={isImageViewPopupOpen}
+          isConfirmPopupOpen={isConfirmPopupOpen}
+          isInfoToolTipOpen={isInfoToolTipOpen}
+          // actions
+          onSubmitCardDelete={handleCardDelete}
           onSubmitAvatar={handleAvatarSubmit}
-        />
-        <EditProfilePopup
-          isOpen={isEditPopupOpen}
-          onClose={closeAllPopups}
           onSubmitUser={handleUserInfoSubmit}
-        />
-        <AddPlacePopup
-          isOpen={isAddPopupOpen}
-          onClose={closeAllPopups}
           onNewPlaceSubmit={handleNewPlaceSubmit}
-        />
-        <PopupConfirm
-          selectedCard={selectedCard}
-          isOpen={isConfirmPopupOpen}
           onClose={closeAllPopups}
-          onSubmit={handleCardDelete}
-        />
-        <ImagePopup
+          // other
           selectedCard={selectedCard}
-          isOpen={isImageViewPopupOpen}
-          onClose={closeAllPopups}
         />
       </div>
     </CurrentUserContext.Provider>

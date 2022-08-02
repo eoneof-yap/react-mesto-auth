@@ -9,7 +9,7 @@ export default function AddPlacePopup(props) {
   function handleSubmit(evt) {
     evt.preventDefault();
 
-    props.onNewPlaceSubmit({
+    props.onSubmit({
       name: titleInputRef.current.value,
       link: linkInputRef.current.value,
     });
