@@ -5,10 +5,10 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import PopupWithForm from './PopupWithForm.js';
 
 export default function EditProfilePopup(props) {
-  /* Use a reference to a DOM node as findDOMNode is deprecated
-   * which is used in CSSTransition internally
-   */
   const nodeRef = useRef(null);
+  // Use a reference to a DOM node as `findDOMNode` is deprecated
+  // which is used in `CSSTransition` internally
+  
   const currentUser = useContext(CurrentUserContext);
   const [values, setValues] = useState({ name: '', about: '' });
 

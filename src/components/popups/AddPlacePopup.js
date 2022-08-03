@@ -4,10 +4,10 @@ import { CSSTransition } from 'react-transition-group';
 import PopupWithForm from './PopupWithForm.js';
 
 export default function AddPlacePopup(props) {
-  /* Use a reference to a DOM node as findDOMNode is deprecated
-   * which is used in CSSTransition internally
-   */
   const nodeRef = useRef(null);
+  // Use a reference to a DOM node as `findDOMNode` is deprecated
+  // which is used in `CSSTransition` internally
+
   const titleInputRef = useRef();
   const linkInputRef = useRef();
 

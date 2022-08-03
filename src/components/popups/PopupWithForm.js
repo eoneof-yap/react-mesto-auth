@@ -1,9 +1,9 @@
 import React, { forwardRef } from 'react';
 
-/* wrap the component with forwardRef() to get a reference
- * to a DOM node from it's parent
- */
 const PopupWithForm = forwardRef((props, ref) => {
+  // Wrap the component with forwardRef() to get
+  // a reference to a DOM node from it's parent
+
   return (
     <section className={`popup popup_type_${props.popupType}`} ref={ref}>
       <div className='popup__container'>

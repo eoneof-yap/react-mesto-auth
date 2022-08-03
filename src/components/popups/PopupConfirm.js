@@ -4,10 +4,9 @@ import { CSSTransition } from 'react-transition-group';
 import PopupWithForm from './PopupWithForm.js';
 
 export default function PopupConfirm(props) {
-  /* Use a reference to a DOM node as findDOMNode is deprecated
-   * which is used in CSSTransition internally
-   */
   const nodeRef = useRef(null);
+  // Use a reference to a DOM node as `findDOMNode` is deprecated
+  // which is used in `CSSTransition` internally
 
   function handleSubmit(evt) {
     evt.preventDefault();
