@@ -1,11 +1,11 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 export default function ImagePopup(props) {
-  /* Use a reference to a DOM node as findDOMNode is deprecated
-   * which is used in CSSTransition internally
-   */
   const nodeRef = useRef(null);
+  // Use a reference to a DOM node as findDOMNode is deprecated
+  // which is used in CSSTransition internally
+
   const popupType = 'view';
 
   const cardHasData = () => {
@@ -17,13 +17,20 @@ export default function ImagePopup(props) {
 
   const isOpen = cardHasData() && props.isOpen ? true : false;
 
+  function handleExit() {
+    props.clearSelectedCard();
+    // Clear the property at the end of the transition,
+    // otherwise there will be artefacts on hiding the popup
+  }
+
   return (
     <CSSTransition
       in={isOpen}
       nodeRef={nodeRef}
       timeout={200}
+      onExited={handleExit}
       classNames='popup_opened'
-      unmountOnExit>
+      unmountOnExit={true}>
       <section className={`popup popup_type_${popupType}`} ref={nodeRef}>
         <div className='popup__container'>
           <button

@@ -10,8 +10,8 @@ export default function Main(props) {
   return (
     <main className='main'>
       {cloneElement(props.preloaderComponent, {
-        // hide preloader
         dataIsLoaded: props.allDataIsLoaded,
+        // show preloader while `false`
       })}
 
       {/* <!-- PROFILE --> */}
@@ -27,7 +27,7 @@ export default function Main(props) {
             title='Изменить фотографию профиля'>
             <button
               className='profile__photo-overlay'
-              onClick={props.onUpdateAvatar}
+              onClick={props.oneditAvatar}
             />
             <img
               className='profile__photo'

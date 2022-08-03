@@ -3,7 +3,6 @@ import React from 'react';
 export default function Login() {
   function handleSubmit(evt) {
     evt.preventDefault();
-    console.log('login submit');
   }
 
   return (

@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 
+import Api from '../utils/Api.js';
 import * as utils from '../utils/utils.js';
 import * as consts from '../utils/constants.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
@@ -10,23 +13,22 @@ import Popups from './Popups.js';
 import Card from './Card.js';
 // import Login from './Login.js';
 // import Register from './Register.js';
-import Api from '../utils/Api.js';
-import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 export default function App() {
-  // show only header and spinner until data is fetched
-  const [allDataIsLoaded, setAllDataIsLoaded] = useState(false);
-  const [currentUser, setCurrentUser] = useState({});
-  const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
-  const [selectedCard, setSelectedCard] = useState({});
-  const [isOpen, setIsOpen] = useState({
-    updateAvatar: false,
+  const popupsStates = {
+    editAvatar: false,
     editProfile: false,
     addCard: false,
     viewImage: false,
     confirmDelete: false,
     tooltip: false,
-  });
+  };
+
+  const [isOpen, setIsOpen] = useState({ popupsStates });
+  const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
+  const [currentUser, setCurrentUser] = useState({});
+  const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
+  const [selectedCard, setSelectedCard] = useState({});
 
   const api = new Api(consts.apiConfig);
 
@@ -119,11 +121,7 @@ export default function App() {
       });
   }
 
-  function closeAllPopups() {
-    Object.keys(isOpen).forEach((key) => {
-      isOpen[key] = false;
-    });
-    setIsOpen(isOpen);
+  function clearSelectedCard() {
     setSelectedCard({});
   }
 
@@ -131,25 +129,41 @@ export default function App() {
   //   setIsInfoToolTipOpen(true);
   // }
 
-  function openUpdateAvatarPopup() {
-    setIsOpen({ updateAvatar: true });
+  function updateOpenedState(key, value) {
+    for (const item in popupsStates) {
+      if (item === key) {
+        popupsStates[item] = value;
+      }
+    }
+    setIsOpen(popupsStates);
+  }
+
+  function closeAllPopups() {
+    for (const item in popupsStates) {
+      popupsStates[item] = false;
+    }
+    setIsOpen(popupsStates);
+  }
+
+  function openeditAvatarPopup() {
+    updateOpenedState('editAvatar', true);
   }
 
   function openEditProfilePopup() {
-    setIsOpen({ editProfile: true });
+    updateOpenedState('editProfile', true);
   }
 
   function openNewCardPopup() {
-    setIsOpen({ addCard: true });
+    updateOpenedState('addCard', true);
   }
 
   function openConfirmDeletePopup(cardData) {
-    setIsOpen({ confirmDelete: true });
+    updateOpenedState('confirmDelete', true);
     setSelectedCard(cardData);
   }
 
   function openImageViewPopup(cardData) {
-    setIsOpen({ viewImage: true });
+    updateOpenedState('viewImage', true);
     setSelectedCard(cardData);
   }
 
@@ -167,7 +181,7 @@ export default function App() {
           allDataIsLoaded={allDataIsLoaded}
           preloaderComponent={<Preloader />}
           // page buttons
-          onUpdateAvatar={openUpdateAvatarPopup}
+          oneditAvatar={openeditAvatarPopup}
           onEditProfile={openEditProfilePopup}
           onAddCard={openNewCardPopup}
           // cards
@@ -182,6 +196,7 @@ export default function App() {
           isOpen={isOpen}
           selectedCard={selectedCard}
           // handlers
+          clearSelectedCard={clearSelectedCard}
           onSubmitCardDelete={handleCardDelete}
           onSubmitAvatar={handleAvatarSubmit}
           onSubmitUser={handleUserInfoSubmit}

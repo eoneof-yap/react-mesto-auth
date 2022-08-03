@@ -10,11 +10,11 @@ import PopupConfirm from './popups/PopupConfirm.js';
 
 export default function Popups(props) {
   return createPortal(
-    // render popups in their1 own div
+    // render popups in their own div
     <div className='popups'>
       {/* <InfoTooltip isOpen={props.isInfoToolTipOpen} onClose={props.onClose} /> */}
       <EditAvatarPopup
-        isOpen={props.isOpen.updateAvatar}
+        isOpen={props.isOpen.editAvatar}
         onSubmit={props.onSubmitAvatar}
         onClose={props.onClose}
       />
@@ -38,6 +38,7 @@ export default function Popups(props) {
         isOpen={props.isOpen.viewImage}
         onClose={props.onClose}
         selectedCard={props.selectedCard}
+        clearSelectedCard={props.clearSelectedCard}
       />
     </div>,
     document.querySelector('#mesto-react-app'),
