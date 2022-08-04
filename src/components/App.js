@@ -24,7 +24,7 @@ export default function App() {
     tooltip: false,
   };
 
-  const [isOpen, setIsOpen] = useState({ popupsStates });
+  const [isOpen, setIsOpen] = useState(popupsStates);
   const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
   const [currentUser, setCurrentUser] = useState({});
   const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
