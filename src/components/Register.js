@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-export default function Login() {
+export default function Login(props) {
   function handleSubmit(evt) {
     evt.preventDefault();
   }
@@ -39,13 +40,16 @@ export default function Login() {
         <button
           className='button form__submit-button form__submit-button_white'
           type='submit'
-          form='login' /* onSubmit={} */
+          form='login'
+          /*     onSubmit={props.onSubmitError} */
         >
           <span>Зарегистрироваться</span>
         </button>
         <div className='form__link'>
           Уже зарегистрированы?
-          <a className='link form__link_link'>Войти</a>
+          <Link className='link form__link_link' to='/sign-in'>
+            Войти
+          </Link>
         </div>
       </form>
     </section>

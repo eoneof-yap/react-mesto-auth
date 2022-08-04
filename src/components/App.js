@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 import Api from '../utils/Api.js';
 import * as utils from '../utils/utils.js';
@@ -11,8 +12,8 @@ import Footer from './Footer.js';
 import Preloader from './Preloader.js';
 import Popups from './Popups.js';
 import Card from './Card.js';
-// import Login from './Login.js';
-// import Register from './Register.js';
+import Login from './Login.js';
+import Register from './Register.js';
 
 export default function App() {
   const popupsStates = {
@@ -125,9 +126,9 @@ export default function App() {
     setSelectedCard({});
   }
 
-  // function openInfoToolTip() {
-  //   setIsInfoToolTipOpen(true);
-  // }
+  function openInfoToolTip() {
+    updateOpenedState('toolTip', true);
+  }
 
   function updateOpenedState(key, value) {
     for (const item in popupsStates) {
@@ -175,22 +176,30 @@ export default function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
         <Header />
-        {/* <Login onSubmitError={openInfoToolTip} /> */}
-        {/* <Register onSubmitError={openInfoToolTip} /> */}
-        <Main
-          allDataIsLoaded={allDataIsLoaded}
-          preloaderComponent={<Preloader />}
-          // page buttons
-          oneditAvatar={openeditAvatarPopup}
-          onEditProfile={openEditProfilePopup}
-          onAddCard={openNewCardPopup}
-          // cards
-          cardComponent={<Card />}
-          cardsList={cardsList}
-          onCardLike={handleCardLike}
-          onCardThumbClick={openImageViewPopup}
-          onDeleteButtonClick={openConfirmDeletePopup}
-        />
+        <Switch>
+          <Route exact path='/'>
+            <Main
+              allDataIsLoaded={allDataIsLoaded}
+              preloaderComponent={<Preloader />}
+              // page buttons
+              oneditAvatar={openeditAvatarPopup}
+              onEditProfile={openEditProfilePopup}
+              onAddCard={openNewCardPopup}
+              // cards
+              cardComponent={<Card />}
+              cardsList={cardsList}
+              onCardLike={handleCardLike}
+              onCardThumbClick={openImageViewPopup}
+              onDeleteButtonClick={openConfirmDeletePopup}
+            />
+          </Route>
+          <Route path='/sign-up'>
+            <Register /* onSubmitError={openInfoToolTip} */ />
+          </Route>
+          <Route path='/sign-in'>
+            <Login /* onSubmitError={openInfoToolTip} */ />
+          </Route>
+        </Switch>
         <Footer />
         <Popups
           isOpen={isOpen}
