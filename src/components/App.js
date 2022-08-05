@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Api from '../utils/Api.js';
 import * as utils from '../utils/utils.js';
@@ -176,30 +176,36 @@ export default function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
         <Header />
-        <Switch>
-          <Route exact path='/'>
-            <Main
-              allDataIsLoaded={allDataIsLoaded}
-              preloaderComponent={<Preloader />}
-              // page buttons
-              oneditAvatar={openeditAvatarPopup}
-              onEditProfile={openEditProfilePopup}
-              onAddCard={openNewCardPopup}
-              // cards
-              cardComponent={<Card />}
-              cardsList={cardsList}
-              onCardLike={handleCardLike}
-              onCardThumbClick={openImageViewPopup}
-              onDeleteButtonClick={openConfirmDeletePopup}
-            />
-          </Route>
-          <Route path='/sign-up'>
-            <Register /* onSubmitError={openInfoToolTip} */ />
-          </Route>
-          <Route path='/sign-in'>
-            <Login /* onSubmitError={openInfoToolTip} */ />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route
+            exact
+            path='/'
+            element={
+              <Main
+                allDataIsLoaded={allDataIsLoaded}
+                preloaderComponent={<Preloader />}
+                // page buttons
+                oneditAvatar={openeditAvatarPopup}
+                onEditProfile={openEditProfilePopup}
+                onAddCard={openNewCardPopup}
+                // cards
+                cardComponent={<Card />}
+                cardsList={cardsList}
+                onCardLike={handleCardLike}
+                onCardThumbClick={openImageViewPopup}
+                onDeleteButtonClick={openConfirmDeletePopup}
+              />
+            }
+          />
+          <Route
+            path='/sign-up'
+            element={<Register /* onSubmitError={openInfoToolTip} */ />}
+          />
+          <Route
+            path='/sign-in'
+            element={<Login /* onSubmitError={openInfoToolTip} */ />}
+          />
+        </Routes>
         <Footer />
         <Popups
           isOpen={isOpen}

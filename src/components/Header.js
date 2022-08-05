@@ -18,7 +18,6 @@ function Header() {
     : `url(${menuButtonIcon})`;
 
   function handleMenuButtonClick() {
-    console.log('👉location:', pathname);
     setIsMenuOpen(!isMenuOpen);
   }
 
