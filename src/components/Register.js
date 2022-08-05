@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 export default function Login(props) {
   function handleSubmit(evt) {
     evt.preventDefault();
+    props.onSubmit();
   }
 
   return (
@@ -40,9 +41,7 @@ export default function Login(props) {
         <button
           className='button form__submit-button form__submit-button_white'
           type='submit'
-          form='login'
-          /*     onSubmit={props.onSubmitError} */
-        >
+          form='login'>
           <span>Зарегистрироваться</span>
         </button>
         <div className='form__link'>

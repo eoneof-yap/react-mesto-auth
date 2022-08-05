@@ -6,13 +6,13 @@ import EditProfilePopup from './popups/EditProfilePopup.js';
 import AddPlacePopup from './popups/AddPlacePopup.js';
 import ImagePopup from './popups/ImagePopup.js';
 import PopupConfirm from './popups/PopupConfirm.js';
-// import InfoTooltip from './InfoTooltip .js';
+import InfoTooltip from './popups/InfoTooltip .js';
 
 export default function Popups(props) {
   return createPortal(
     // render popups in their own div
     <div className='popups'>
-      {/* <InfoTooltip isOpen={props.isInfoToolTipOpen} onClose={props.onClose} /> */}
+      <InfoTooltip isOpen={props.isOpen.tooltip } onClose={props.onClose} />
       <EditAvatarPopup
         isOpen={props.isOpen.editAvatar}
         onSubmit={props.onSubmitAvatar}

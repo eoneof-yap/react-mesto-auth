@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import Api from '../utils/Api.js';
@@ -127,7 +127,7 @@ export default function App() {
   }
 
   function openInfoToolTip() {
-    updateOpenedState('toolTip', true);
+    updateOpenedState('tooltip', true);
   }
 
   function updateOpenedState(key, value) {
@@ -197,14 +197,8 @@ export default function App() {
               />
             }
           />
-          <Route
-            path='/sign-up'
-            element={<Register /* onSubmitError={openInfoToolTip} */ />}
-          />
-          <Route
-            path='/sign-in'
-            element={<Login /* onSubmitError={openInfoToolTip} */ />}
-          />
+          <Route path='/sign-up' element={<Register onSubmit={openInfoToolTip} />} />
+          <Route path='/sign-in' element={<Login onSubmit={openInfoToolTip} />} />
         </Routes>
         <Footer />
         <Popups
