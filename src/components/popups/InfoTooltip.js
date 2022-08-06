@@ -5,13 +5,14 @@ import iconSuccess from '../../images/icon-success.svg';
 import iconError from '../../images/icon-error.svg';
 
 export default function InfoTooltip(props) {
+  const success = true;
   const nodeRef = useRef(null);
   const popupType = 'tooltip';
 
   // MOCK CONSTANTS
-  const menuButtonBgImage = props.isOpen ? `url(${iconSuccess})` : `url(${iconError})`;
+  const tooltipImage = success ? `url(${iconSuccess})` : `url(${iconError})`;
 
-  const toolTipTiileText = props.isOpen
+  const toolTipTiileText = success
     ? 'Вы успешно зарегистрировались!'
     : 'Что-то пошло не так! Попробуйте ещё раз.';
 
@@ -36,7 +37,7 @@ export default function InfoTooltip(props) {
             <div
               className='tooltip__icon'
               style={{
-                backgroundImage: `${menuButtonBgImage}`,
+                backgroundImage: `${tooltipImage}`,
               }}></div>
             <h2 className='tooltip__title'>{toolTipTiileText}</h2>
           </div>
