@@ -197,8 +197,11 @@ export default function App() {
               />
             }
           />
-          <Route path='/sign-up' element={<Register onSubmit={openInfoToolTip} />} />
-          <Route path='/sign-in' element={<Login onSubmit={openInfoToolTip} />} />
+          <Route
+            path='/sign-up'
+            element={<Register onSubmit={openInfoToolTip} />}
+          />
+          <Route path='/sign-in' element={<Login /* onSubmit={} */ />} />
         </Routes>
         <Footer />
         <Popups
