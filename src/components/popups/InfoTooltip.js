@@ -4,7 +4,6 @@ import { CSSTransition } from 'react-transition-group';
 import iconSuccess from '../../images/icon-success.svg';
 import iconError from '../../images/icon-error.svg';
 
-// FIXME: shown as black
 export default function InfoTooltip(props) {
   const nodeRef = useRef(null);
   const popupType = 'tooltip';
