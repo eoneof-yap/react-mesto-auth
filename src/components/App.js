@@ -17,6 +17,8 @@ import Login from './Login.js';
 import Register from './Register.js';
 
 export default function App() {
+  let auth = { token: true, email: 'kzistof@mail.com' }; // TODO get from api
+
   const popupsStates = {
     editAvatar: false,
     editProfile: false,
@@ -176,13 +178,13 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
-        <Header />
+        <Header authData={auth} paths={consts.paths} />
         <Routes>
-          <Route element={<PrivateRoutes />}>
-            <Route path='*' />
+          <Route element={<PrivateRoutes token={auth.token} />}>
+            <Route path={consts.paths.ANY} />
             <Route
               exact
-              path='/'
+              path={consts.paths.ROOT}
               element={
                 <Main
                   allDataIsLoaded={allDataIsLoaded}
@@ -204,11 +206,11 @@ export default function App() {
 
           {/* REGULAR ROUTES */}
           <Route
-            path='/sign-up'
+            path={consts.paths.SIGN_UP}
             element={<Register onSubmit={openInfoToolTip} />}
           />
           <Route
-            path='/sign-in'
+            path={consts.paths.SIGN_IN}
             element={
               <Login
                 onSubmit={() => {

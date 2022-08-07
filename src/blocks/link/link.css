@@ -1,5 +1,7 @@
 .link {
+  outline: none;
   color: #fff;
+  background-color: transparent;
   text-decoration: none;
   opacity: 1;
   transition: opacity cubic-bezier(0, 0.6, 0.82, 1.03) 1s;

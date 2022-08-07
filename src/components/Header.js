@@ -1,15 +1,11 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import closeButtonIcon from '../images/closeButton.svg';
 import menuButtonIcon from '../images/burger-menu-icon.svg';
 
-function Header() {
-  /** TEMP **************/
-  const loggedIn = false;
-  const userEmail = 'email@mail.com';
-  /**********************/
-
+function Header({ authData, paths }) {
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const visibleMenuClass = isMenuOpen ? `${'header__menu_mobile'}` : '';
@@ -18,7 +14,12 @@ function Header() {
     : `url(${menuButtonIcon})`;
 
   function handleMenuButtonClick() {
+    // TODO: delete token from localstoraage
     setIsMenuOpen(!isMenuOpen);
+  }
+
+  function signOut() {
+    navigate(paths.SIGN_IN);
   }
 
   return (
@@ -38,17 +39,18 @@ function Header() {
       </div>
       <div className={`header__menu ${visibleMenuClass}`}>
         <div className='divider divider_top'></div>
-        {loggedIn ? (
+        {authData.token ? (
           <>
             <div className='header__email'>
-              <span>{userEmail}</span>
+              <span>{authData.email}</span>
             </div>
-            <Link to='/' className='link header__link'>
+            <button className='link header__link' onClick={signOut}>
               Выйти
-            </Link>
+            </button>
           </>
         ) : (
           <>
+            {/* TODO: rename to `button` */}
             <Link
               to={pathname === '/sign-up' ? '/sign-in' : '/sign-up'}
               className='link header__link'>
