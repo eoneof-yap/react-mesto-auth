@@ -5,6 +5,7 @@ import Api from '../utils/Api.js';
 import * as utils from '../utils/utils.js';
 import * as consts from '../utils/constants.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import { PrivateRoutes } from '../utils/PrivateRoutes.js';
 
 import Header from './Header.js';
 import Main from './Main.js';
@@ -177,31 +178,45 @@ export default function App() {
       <div className='page'>
         <Header />
         <Routes>
-          <Route
-            exact
-            path='/'
-            element={
-              <Main
-                allDataIsLoaded={allDataIsLoaded}
-                preloaderComponent={<Preloader />}
-                // page buttons
-                oneditAvatar={openeditAvatarPopup}
-                onEditProfile={openEditProfilePopup}
-                onAddCard={openNewCardPopup}
-                // cards
-                cardComponent={<Card />}
-                cardsList={cardsList}
-                onCardLike={handleCardLike}
-                onCardThumbClick={openImageViewPopup}
-                onDeleteButtonClick={openConfirmDeletePopup}
-              />
-            }
-          />
+          <Route element={<PrivateRoutes />}>
+            <Route path='*' />
+            <Route
+              exact
+              path='/'
+              element={
+                <Main
+                  allDataIsLoaded={allDataIsLoaded}
+                  preloaderComponent={<Preloader />}
+                  // page buttons
+                  oneditAvatar={openeditAvatarPopup}
+                  onEditProfile={openEditProfilePopup}
+                  onAddCard={openNewCardPopup}
+                  // cards
+                  cardComponent={<Card />}
+                  cardsList={cardsList}
+                  onCardLike={handleCardLike}
+                  onCardThumbClick={openImageViewPopup}
+                  onDeleteButtonClick={openConfirmDeletePopup}
+                />
+              }
+            />
+          </Route>
+
+          {/* REGULAR ROUTES */}
           <Route
             path='/sign-up'
             element={<Register onSubmit={openInfoToolTip} />}
           />
-          <Route path='/sign-in' element={<Login /* onSubmit={} */ />} />
+          <Route
+            path='/sign-in'
+            element={
+              <Login
+                onSubmit={() => {
+                  console.log('Logged In');
+                }}
+              />
+            }
+          />
         </Routes>
         <Footer />
         <Popups
