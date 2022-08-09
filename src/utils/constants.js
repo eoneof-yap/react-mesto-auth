@@ -9,3 +9,10 @@
     'content-type': 'application/json',
   },
 };
+
+export const paths = {
+  ANY: '*',
+  ROOT: '/',
+  SIGN_UP: '/sign-up',
+  SIGN_IN: '/sign-in',
+};

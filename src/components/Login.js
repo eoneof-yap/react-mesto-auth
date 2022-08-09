@@ -3,7 +3,7 @@ import React from 'react';
 export default function Login(props) {
   function handleSubmit(evt) {
     evt.preventDefault();
-    props.onSubmitError();
+    props.onSubmit();
   }
 
   return (
@@ -41,8 +41,7 @@ export default function Login(props) {
         <button
           className='button form__submit-button form__submit-button_white'
           type='submit'
-          form='login' /* onSubmit={} */
-        >
+          form='login'>
           <span>Войти</span>
         </button>
       </form>

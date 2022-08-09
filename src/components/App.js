@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 
 import Api from '../utils/Api.js';
 import * as utils from '../utils/utils.js';
 import * as consts from '../utils/constants.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import { PrivateRoutes } from '../utils/PrivateRoutes.js';
 
 import Header from './Header.js';
 import Main from './Main.js';
@@ -11,10 +13,12 @@ import Footer from './Footer.js';
 import Preloader from './Preloader.js';
 import Popups from './Popups.js';
 import Card from './Card.js';
-// import Login from './Login.js';
-// import Register from './Register.js';
+import Login from './Login.js';
+import Register from './Register.js';
 
 export default function App() {
+  let auth = { token: true, email: 'kzistof@mail.com' }; // TODO get from api
+
   const popupsStates = {
     editAvatar: false,
     editProfile: false,
@@ -24,7 +28,7 @@ export default function App() {
     tooltip: false,
   };
 
-  const [isOpen, setIsOpen] = useState({ popupsStates });
+  const [isOpen, setIsOpen] = useState(popupsStates);
   const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
   const [currentUser, setCurrentUser] = useState({});
   const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
@@ -125,9 +129,9 @@ export default function App() {
     setSelectedCard({});
   }
 
-  // function openInfoToolTip() {
-  //   setIsInfoToolTipOpen(true);
-  // }
+  function openInfoToolTip() {
+    updateOpenedState('tooltip', true);
+  }
 
   function updateOpenedState(key, value) {
     for (const item in popupsStates) {
@@ -174,23 +178,48 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
-        <Header />
-        {/* <Login onSubmitError={openInfoToolTip} /> */}
-        {/* <Register onSubmitError={openInfoToolTip} /> */}
-        <Main
-          allDataIsLoaded={allDataIsLoaded}
-          preloaderComponent={<Preloader />}
-          // page buttons
-          oneditAvatar={openeditAvatarPopup}
-          onEditProfile={openEditProfilePopup}
-          onAddCard={openNewCardPopup}
-          // cards
-          cardComponent={<Card />}
-          cardsList={cardsList}
-          onCardLike={handleCardLike}
-          onCardThumbClick={openImageViewPopup}
-          onDeleteButtonClick={openConfirmDeletePopup}
-        />
+        <Header authData={auth} paths={consts.paths} />
+        <Routes>
+          <Route element={<PrivateRoutes token={auth.token} />}>
+            <Route path={consts.paths.ANY} />
+            <Route
+              exact
+              path={consts.paths.ROOT}
+              element={
+                <Main
+                  allDataIsLoaded={allDataIsLoaded}
+                  preloaderComponent={<Preloader />}
+                  // page buttons
+                  oneditAvatar={openeditAvatarPopup}
+                  onEditProfile={openEditProfilePopup}
+                  onAddCard={openNewCardPopup}
+                  // cards
+                  cardComponent={<Card />}
+                  cardsList={cardsList}
+                  onCardLike={handleCardLike}
+                  onCardThumbClick={openImageViewPopup}
+                  onDeleteButtonClick={openConfirmDeletePopup}
+                />
+              }
+            />
+          </Route>
+
+          {/* REGULAR ROUTES */}
+          <Route
+            path={consts.paths.SIGN_UP}
+            element={<Register onSubmit={openInfoToolTip} />}
+          />
+          <Route
+            path={consts.paths.SIGN_IN}
+            element={
+              <Login
+                onSubmit={() => {
+                  console.log('Logged In');
+                }}
+              />
+            }
+          />
+        </Routes>
         <Footer />
         <Popups
           isOpen={isOpen}
