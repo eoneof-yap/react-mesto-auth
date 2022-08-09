@@ -48,6 +48,8 @@ export default function App() {
         setCardsList(remoteCardsData);
       })
       .then(() => {
+        // TODO show preloader on root when logged in
+        // FIXME Login screen is shown for a bit
         setAllDataIsLoaded(true);
       })
       .catch((err) => {
@@ -182,8 +184,8 @@ export default function App() {
   }
 
   function handleLogout() {
+    localStorage.removeItem('jwt');
     navigate(consts.paths.login);
-    console.log('logout'); // TODO handle it more!
   }
 
   function updateOpenedState(key, value) {
@@ -204,10 +206,14 @@ export default function App() {
     closeAllPopups();
     if (type === 'success') {
       navigate(consts.paths.login);
+    } else if (type === 'error') {
+      // fixme close tooltip
+      toggleTooltip('error', false);
     }
   }
 
   function closeAllPopups() {
+    // FIXME remove tooltip from object ?? it has it's own toggle
     for (const item in popupsStates) {
       popupsStates[item] = false;
     }
