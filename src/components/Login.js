@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function Login(props) {
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
+  });
+
   function handleSubmit(evt) {
     evt.preventDefault();
-    props.onSubmit();
+    props.onSubmit(credentials);
+  }
+
+  function handleChanges(evt) {
+    // extract target input's attributes
+    const { name, value } = evt.target;
+
+    // set it's name as key and it's value as value
+    setCredentials({
+      ...credentials,
+      [name]: value,
+    });
   }
 
   return (
@@ -24,6 +40,7 @@ export default function Login(props) {
               type='email'
               required
               autoComplete='email'
+              onChange={handleChanges}
             />
           </div>
           <div className='form__input-container'>
@@ -35,6 +52,7 @@ export default function Login(props) {
               minLength='8'
               required
               autoComplete='current-password'
+              onChange={handleChanges}
             />
           </div>
         </fieldset>

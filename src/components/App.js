@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import Api from '../utils/Api.js';
 import * as utils from '../utils/utils.js';
@@ -28,6 +28,8 @@ export default function App() {
     confirmDelete: false,
     tooltip: false,
   };
+
+  const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(popupsStates);
   const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
@@ -132,12 +134,24 @@ export default function App() {
     });
   }
 
+  function handleLogin(data) {
+    console.log(data);
+    // aooth.login(data).then((res) => {
+    //   res.status === 201 ? openInfoToolTip(true) : openInfoToolTip(false);
+    // });
+  }
+
   function clearSelectedCard() {
     setSelectedCard({});
   }
 
   function openInfoToolTip(state) {
     updateOpenedState('tooltip', state);
+  }
+
+  function handleTooltipClose() {
+    closeAllPopups();
+    navigate(consts.paths.login);
   }
 
   function updateOpenedState(key, value) {
@@ -185,7 +199,7 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
-        <Header authData={auth} paths={consts.paths} />
+        <Header authData={auth} />
         <Routes>
           <Route element={<PrivateRoutes token={auth.token} />}>
             <Route path={consts.paths.any} />
@@ -215,16 +229,7 @@ export default function App() {
             path={consts.paths.register}
             element={<Register onSubmit={handleRegister} />}
           />
-          <Route
-            path={consts.paths.login}
-            element={
-              <Login
-                onSubmit={() => {
-                  console.log('Logged In');
-                }}
-              />
-            }
-          />
+          <Route path={consts.paths.login} element={<Login onSubmit={handleLogin} />} />
         </Routes>
         <Footer />
         <Popups
@@ -237,8 +242,7 @@ export default function App() {
           onSubmitUser={handleUserInfoSubmit}
           onSubmitNewPlace={handleNewPlaceSubmit}
           onClose={closeAllPopups}
-          // TODO: redirect to Login on close or after timeout ~5s (???)
-          // onTooltipClose={redirect}
+          onTooltipClose={handleTooltipClose}
         />
       </div>
     </CurrentUserContext.Provider>

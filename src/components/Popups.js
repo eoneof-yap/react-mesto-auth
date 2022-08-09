@@ -12,7 +12,7 @@ export default function Popups(props) {
   return createPortal(
     // render popups in their own div
     <div className='popups'>
-      <InfoTooltip isOpen={props.isOpen.tooltip} onClose={props.onClose} />
+      <InfoTooltip isOpen={props.isOpen.tooltip} onClose={props.onTooltipClose} />
       <EditAvatarPopup
         isOpen={props.isOpen.editAvatar}
         onSubmit={props.onSubmitAvatar}
