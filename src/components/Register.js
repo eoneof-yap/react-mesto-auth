@@ -10,7 +10,7 @@ export default function Register(props) {
   // TODO: refactor with real data
   function handleSubmit(evt) {
     evt.preventDefault();
-    props.onSubmit(credentials)
+    props.onSubmit(credentials);
   }
 
   function handleChanges(evt) {
@@ -25,7 +25,7 @@ export default function Register(props) {
   }
 
   return (
-    <section className='auth'>
+    <section className='auth auth_place_register'>
       <form
         className='form form_place_auth'
         id='register'

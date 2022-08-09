@@ -92,6 +92,7 @@
 
 /*  AUTH  */
 @import url("./blocks/auth/auth.css");
+@import url("./blocks/auth/_place/auth_place_register.css");
 
 /* cards-grid */
 @import url("./blocks/card/card.css");
