@@ -52,7 +52,7 @@ export default function InfoTooltip(props) {
             type='button'
             name='close-button'
             title='Закрыть'
-            onClick={props.onClose}>
+            onClick={handleClose}>
             Закрыть
           </button>
           <div className='tooltip'>

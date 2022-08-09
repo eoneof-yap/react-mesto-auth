@@ -166,9 +166,10 @@ export default function App() {
     updateOpenedState('tooltip', state);
   }
 
-  function handleTooltipClose(type) {
+  function handleTooltipClose(ttype) {
+    console.log('👉type:', ttype);
     closeAllPopups();
-    if (type === 'success') {
+    if (ttype === 'success') {
       navigate(consts.paths.login);
     }
   }
@@ -216,7 +217,7 @@ export default function App() {
         <Header authData={auth} />
         <Routes>
           {/* TODO add token */}
-          <Route element={<PrivateRoutes token={auth} />}>
+          <Route element={<PrivateRoutes token={false} />}>
             <Route path={consts.paths.any} />
             <Route
               exact
