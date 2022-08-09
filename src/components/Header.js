@@ -1,14 +1,12 @@
 import { useState } from 'react';
-import { Link, useNavigate, Routes, Route } from 'react-router-dom';
+import { Link, Routes, Route } from 'react-router-dom';
 
 import closeButtonIcon from '../images/closeButton.svg';
 import menuButtonIcon from '../images/burger-menu-icon.svg';
 import { paths } from '../utils/constants.js';
 
-export default function Header({ authData }) {
-  const navigate = useNavigate();
+export default function Header({ authData, onLogout }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const visibleMenuClass = isMenuOpen ? `${'header__menu_mobile'}` : '';
   const menuButtonBgImage = isMenuOpen
     ? `url(${closeButtonIcon})`
@@ -18,20 +16,15 @@ export default function Header({ authData }) {
     setIsMenuOpen(!isMenuOpen);
   }
 
-  function signOut() {
-    // TODO: delete token from localstoraage
-    navigate(paths.SIGN_IN);
-  }
-
   function handleSignOut() {
     toggleMenu();
-    signOut();
+    onLogout();
   }
 
   return (
     <header className='header'>
       <div className='header__actions'>
-        <Link to='/' className='header__logo' />
+        <Link to={paths.root} className='header__logo' />
         <button
           className='button header__menu-button'
           type='button'
@@ -65,7 +58,10 @@ export default function Header({ authData }) {
             exact
             path={paths.register}
             element={
-              <Link to={paths.login} className='link header__link' onClick={toggleMenu}>
+              <Link
+                to={paths.login}
+                className='link header__link'
+                onClick={toggleMenu}>
                 Войти
               </Link>
             }

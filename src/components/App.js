@@ -16,24 +16,27 @@ import Login from './Login.js';
 import Register from './Register.js';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import { PrivateRoutes } from '../utils/PrivateRoutes.js';
+import { ProtectedRoutes } from '../utils/ProtectedRoutes.js';
+
+const popupsStates = {
+  editAvatar: false,
+  editProfile: false,
+  addCard: false,
+  viewImage: false,
+  confirmDelete: false,
+  tooltip: false,
+};
 
 export default function App() {
-  const popupsStates = {
-    editAvatar: false,
-    editProfile: false,
-    addCard: false,
-    viewImage: false,
-    confirmDelete: false,
-    tooltip: false,
-  };
-
   const [isOpen, setIsOpen] = useState(popupsStates);
+
   const [tooltipType, setTooltipType] = useState('');
   const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
-  const [currentUser, setCurrentUser] = useState({});
   const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
   const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
+
   const navigate = useNavigate();
 
   const api = new Api(consts.apiConfig);
@@ -140,16 +143,25 @@ export default function App() {
   }
 
   function handleLogin(data) {
-    console.log(data);
     auth
       .authorize(data)
       .then((res) => {
+        if (res.token) {
+          // localStorage.setItem({ jwt: res.token });
+          // console.log(localStorage.getItem('jwt'));
+        }
+        setLoggedIn(true);
         navigate(consts.paths.root);
       })
       .catch((err) => {
         toggleTooltip('error', true);
         utils.requestErrorHandler(err);
       });
+  }
+
+  function handleLogout() {
+    navigate(consts.paths.login);
+    console.log('logout'); // TODO handle it more!
   }
 
   function updateOpenedState(key, value) {
@@ -166,10 +178,9 @@ export default function App() {
     updateOpenedState('tooltip', state);
   }
 
-  function handleTooltipClose(ttype) {
-    console.log('👉type:', ttype);
+  function handleTooltipClose(type) {
     closeAllPopups();
-    if (ttype === 'success') {
+    if (type === 'success') {
       navigate(consts.paths.login);
     }
   }
@@ -214,11 +225,17 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
-        <Header authData={auth} />
+        <Header authData={auth} onLogout={handleLogout} />
         <Routes>
-          {/* TODO add token */}
-          <Route element={<PrivateRoutes token={false} />}>
+          <Route
+            element={
+              <ProtectedRoutes
+                loggedIn={loggedIn}
+                redirectTo={consts.paths.login}
+              />
+            }>
             <Route path={consts.paths.any} />
+
             <Route
               exact
               path={consts.paths.root}
@@ -240,7 +257,8 @@ export default function App() {
               }
             />
           </Route>
-          {/* REGULAR ROUTES */}
+
+          {/* PUBLIC ROUTES */}
           <Route
             path={consts.paths.register}
             element={<Register onSubmit={handleRegister} />}
