@@ -2,10 +2,9 @@ import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import Api from '../utils/Api.js';
+import * as auth from '../utils/auth.js';
 import * as utils from '../utils/utils.js';
 import * as consts from '../utils/constants.js';
-import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import { PrivateRoutes } from '../utils/PrivateRoutes.js';
 
 import Header from './Header.js';
 import Main from './Main.js';
@@ -15,11 +14,11 @@ import Popups from './Popups.js';
 import Card from './Card.js';
 import Login from './Login.js';
 import Register from './Register.js';
-import * as aooth from '../utils/auth.js';
+
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import { PrivateRoutes } from '../utils/PrivateRoutes.js';
 
 export default function App() {
-  let auth = { token: false, email: 'kzistof@mail.com' }; // TODO get from api
-
   const popupsStates = {
     editAvatar: false,
     editProfile: false,
@@ -29,13 +28,13 @@ export default function App() {
     tooltip: false,
   };
 
-  const navigate = useNavigate();
-
   const [isOpen, setIsOpen] = useState(popupsStates);
+  const [tooltipType, setTooltipType] = useState('');
   const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
   const [currentUser, setCurrentUser] = useState({});
   const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
   const [selectedCard, setSelectedCard] = useState({});
+  const navigate = useNavigate();
 
   const api = new Api(consts.apiConfig);
 
@@ -129,29 +128,28 @@ export default function App() {
   }
 
   function handleRegister(data) {
-    aooth.register(data).then((res) => {
-      res.status === 201 ? openInfoToolTip(true) : openInfoToolTip(false);
-    });
+    auth
+      .register(data)
+      .then((res) => {
+        toggleTooltip('success', true);
+      })
+      .catch((err) => {
+        toggleTooltip('error', true);
+        utils.requestErrorHandler(err);
+      });
   }
 
   function handleLogin(data) {
     console.log(data);
-    // aooth.login(data).then((res) => {
-    //   res.status === 201 ? openInfoToolTip(true) : openInfoToolTip(false);
-    // });
-  }
-
-  function clearSelectedCard() {
-    setSelectedCard({});
-  }
-
-  function openInfoToolTip(state) {
-    updateOpenedState('tooltip', state);
-  }
-
-  function handleTooltipClose() {
-    closeAllPopups();
-    navigate(consts.paths.login);
+    auth
+      .authorize(data)
+      .then((res) => {
+        navigate(consts.paths.root);
+      })
+      .catch((err) => {
+        toggleTooltip('error', true);
+        utils.requestErrorHandler(err);
+      });
   }
 
   function updateOpenedState(key, value) {
@@ -163,6 +161,18 @@ export default function App() {
     setIsOpen(popupsStates);
   }
 
+  function toggleTooltip(type, state) {
+    setTooltipType(type);
+    updateOpenedState('tooltip', state);
+  }
+
+  function handleTooltipClose(type) {
+    closeAllPopups();
+    if (type === 'success') {
+      navigate(consts.paths.login);
+    }
+  }
+
   function closeAllPopups() {
     for (const item in popupsStates) {
       popupsStates[item] = false;
@@ -170,7 +180,7 @@ export default function App() {
     setIsOpen(popupsStates);
   }
 
-  function openeditAvatarPopup() {
+  function openEditAvatarPopup() {
     updateOpenedState('editAvatar', true);
   }
 
@@ -192,6 +202,10 @@ export default function App() {
     setSelectedCard(cardData);
   }
 
+  function clearSelectedCard() {
+    setSelectedCard({});
+  }
+
   useEffect(() => {
     getAllData();
   }, []);
@@ -201,7 +215,8 @@ export default function App() {
       <div className='page'>
         <Header authData={auth} />
         <Routes>
-          <Route element={<PrivateRoutes token={auth.token} />}>
+          {/* TODO add token */}
+          <Route element={<PrivateRoutes token={auth} />}>
             <Route path={consts.paths.any} />
             <Route
               exact
@@ -211,7 +226,7 @@ export default function App() {
                   allDataIsLoaded={allDataIsLoaded}
                   preloaderComponent={<Preloader />}
                   // page buttons
-                  oneditAvatar={openeditAvatarPopup}
+                  oneditAvatar={openEditAvatarPopup}
                   onEditProfile={openEditProfilePopup}
                   onAddCard={openNewCardPopup}
                   // cards
@@ -229,20 +244,24 @@ export default function App() {
             path={consts.paths.register}
             element={<Register onSubmit={handleRegister} />}
           />
-          <Route path={consts.paths.login} element={<Login onSubmit={handleLogin} />} />
+          <Route
+            path={consts.paths.login}
+            element={<Login onSubmit={handleLogin} />}
+          />
         </Routes>
         <Footer />
         <Popups
           isOpen={isOpen}
           selectedCard={selectedCard}
+          tooltipType={tooltipType}
           // handlers
+          onTooltipClose={handleTooltipClose}
           clearSelectedCard={clearSelectedCard}
-          onSubmitCardDelete={handleCardDelete}
           onSubmitAvatar={handleAvatarSubmit}
           onSubmitUser={handleUserInfoSubmit}
           onSubmitNewPlace={handleNewPlaceSubmit}
+          onSubmitCardDelete={handleCardDelete}
           onClose={closeAllPopups}
-          onTooltipClose={handleTooltipClose}
         />
       </div>
     </CurrentUserContext.Provider>
