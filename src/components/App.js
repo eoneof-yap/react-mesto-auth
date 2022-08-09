@@ -15,9 +15,10 @@ import Popups from './Popups.js';
 import Card from './Card.js';
 import Login from './Login.js';
 import Register from './Register.js';
+import * as aooth from '../utils/auth.js';
 
 export default function App() {
-  let auth = { token: true, email: 'kzistof@mail.com' }; // TODO get from api
+  let auth = { token: false, email: 'kzistof@mail.com' }; // TODO get from api
 
   const popupsStates = {
     editAvatar: false,
@@ -125,12 +126,18 @@ export default function App() {
       });
   }
 
+  function handleRegister(data) {
+    aooth.register(data).then((res) => {
+      res.status === 201 ? openInfoToolTip(true) : openInfoToolTip(false);
+    });
+  }
+
   function clearSelectedCard() {
     setSelectedCard({});
   }
 
-  function openInfoToolTip() {
-    updateOpenedState('tooltip', true);
+  function openInfoToolTip(state) {
+    updateOpenedState('tooltip', state);
   }
 
   function updateOpenedState(key, value) {
@@ -181,10 +188,10 @@ export default function App() {
         <Header authData={auth} paths={consts.paths} />
         <Routes>
           <Route element={<PrivateRoutes token={auth.token} />}>
-            <Route path={consts.paths.ANY} />
+            <Route path={consts.paths.any} />
             <Route
               exact
-              path={consts.paths.ROOT}
+              path={consts.paths.root}
               element={
                 <Main
                   allDataIsLoaded={allDataIsLoaded}
@@ -203,14 +210,13 @@ export default function App() {
               }
             />
           </Route>
-
           {/* REGULAR ROUTES */}
           <Route
-            path={consts.paths.SIGN_UP}
-            element={<Register onSubmit={openInfoToolTip} />}
+            path={consts.paths.register}
+            element={<Register onSubmit={handleRegister} />}
           />
           <Route
-            path={consts.paths.SIGN_IN}
+            path={consts.paths.login}
             element={
               <Login
                 onSubmit={() => {
@@ -231,6 +237,8 @@ export default function App() {
           onSubmitUser={handleUserInfoSubmit}
           onSubmitNewPlace={handleNewPlaceSubmit}
           onClose={closeAllPopups}
+          // TODO: redirect to Login on close or after timeout ~5s (???)
+          // onTooltipClose={redirect}
         />
       </div>
     </CurrentUserContext.Provider>

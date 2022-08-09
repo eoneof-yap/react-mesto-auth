@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Login(props) {
+export default function Register(props) {
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
+  });
+
+  // TODO: refactor with real data
   function handleSubmit(evt) {
     evt.preventDefault();
-    props.onSubmit();
+    props.onSubmit(credentials);
+  }
+
+  function handleChanges(evt) {
+    // extract target input's attributes
+    const { name, value } = evt.target;
+
+    // set it's name as key and it's value as value
+    setCredentials({
+      ...credentials,
+      [name]: value,
+    });
   }
 
   return (
-    <section className='auth'>
+    <section className='auth auth_place_register'>
       <form
         className='form form_place_auth'
         id='register'
@@ -25,6 +42,7 @@ export default function Login(props) {
               type='email'
               required
               autoComplete='email'
+              onChange={handleChanges}
             />
           </div>
           <div className='form__input-container'>
@@ -35,6 +53,7 @@ export default function Login(props) {
               type='password'
               required
               autoComplete='new-password'
+              onChange={handleChanges}
             />
           </div>
         </fieldset>
