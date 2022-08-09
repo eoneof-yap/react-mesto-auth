@@ -181,10 +181,10 @@ export default function App() {
         <Header authData={auth} paths={consts.paths} />
         <Routes>
           <Route element={<PrivateRoutes token={auth.token} />}>
-            <Route path={consts.paths.ANY} />
+            <Route path={consts.paths.any} />
             <Route
               exact
-              path={consts.paths.ROOT}
+              path={consts.paths.root}
               element={
                 <Main
                   allDataIsLoaded={allDataIsLoaded}
@@ -206,11 +206,11 @@ export default function App() {
 
           {/* REGULAR ROUTES */}
           <Route
-            path={consts.paths.SIGN_UP}
+            path={consts.paths.login}
             element={<Register onSubmit={openInfoToolTip} />}
           />
           <Route
-            path={consts.paths.SIGN_IN}
+            path={consts.paths.register}
             element={
               <Login
                 onSubmit={() => {

@@ -11,8 +11,14 @@
 };
 
 export const paths = {
-  ANY: '*',
-  ROOT: '/',
+  any: '*',
+  root: '/',
+  login: '/sign-up',
+  register: '/sign-in',
+};
+
+export const authConfig = {
+  BASE_URL: 'https://auth.nomoreparties.co',
+  SIGN_IN: '/signin',
   SIGN_UP: '/sign-up',
-  SIGN_IN: '/sign-in',
 };
