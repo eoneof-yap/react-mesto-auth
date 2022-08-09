@@ -5,7 +5,7 @@ import closeButtonIcon from '../images/closeButton.svg';
 import menuButtonIcon from '../images/burger-menu-icon.svg';
 import { paths } from '../utils/constants.js';
 
-export default function Header({ authData, onLogout }) {
+export default function Header({ email, onLogout }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const visibleMenuClass = isMenuOpen ? `${'header__menu_mobile'}` : '';
   const menuButtonBgImage = isMenuOpen
@@ -46,7 +46,7 @@ export default function Header({ authData, onLogout }) {
             element={
               <>
                 <div className='header__email'>
-                  <span>{authData.email}</span>
+                  <span>{email}</span>
                 </div>
                 <button className='link header__link' onClick={handleSignOut}>
                   Выйти

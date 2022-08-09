@@ -34,9 +34,9 @@ export default function App() {
   const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
   const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
   const [selectedCard, setSelectedCard] = useState({});
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({}); // TODO remove - replace with userInfo
+  const [userInfo, setuserInfo] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
-
   const navigate = useNavigate();
 
   const api = new Api(consts.apiConfig);
@@ -130,9 +130,9 @@ export default function App() {
       });
   }
 
-  function handleRegister(data) {
-    auth
-      .register(data)
+  function handleRegister(credentials) {
+    return auth
+      .register(credentials)
       .then((res) => {
         toggleTooltip('success', true);
       })
@@ -142,21 +142,43 @@ export default function App() {
       });
   }
 
-  function handleLogin(data) {
-    auth
-      .authorize(data)
+  function handleLogin(credentials) {
+    return auth
+      .authorize(credentials)
       .then((res) => {
-        if (res.token) {
-          // localStorage.setItem({ jwt: res.token });
-          // console.log(localStorage.getItem('jwt'));
+        return res.json();
+      })
+      .then(({ token }) => {
+        if (token) {
+          localStorage.setItem('jwt', token);
+          setLoggedIn(true); // triggers redirect in useEffect
         }
-        setLoggedIn(true);
-        navigate(consts.paths.root);
       })
       .catch((err) => {
         toggleTooltip('error', true);
         utils.requestErrorHandler(err);
       });
+  }
+
+  function checkToken() {
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) {
+      return;
+    } else {
+      auth
+        .getUserInfo(jwt)
+        .then((res) => {
+          return res.json();
+        })
+        .then(({ data }) => {
+          setuserInfo(data);
+          console.log('userInfo:', userInfo);
+          setLoggedIn(true); // triggers redirect in useEffect
+        })
+        .catch((err) => {
+          utils.requestErrorHandler(err);
+        });
+    }
   }
 
   function handleLogout() {
@@ -219,13 +241,18 @@ export default function App() {
   }
 
   useEffect(() => {
+    loggedIn && navigate(consts.paths.root);
     getAllData();
+  }, [loggedIn]);
+
+  useEffect(() => {
+    checkToken();
   }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
-        <Header authData={auth} onLogout={handleLogout} />
+        <Header email={userInfo.email} onLogout={handleLogout} />
         <Routes>
           <Route
             element={
