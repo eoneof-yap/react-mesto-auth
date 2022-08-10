@@ -15,7 +15,7 @@ import Login from './Login.js';
 import Register from './Register.js';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import { ProtectedRoutes } from '../utils/ProtectedRoutes.js';
+import { ProtectedRoutes } from './ProtectedRoutes.js';
 
 export default function App() {
   const popupsStates = {

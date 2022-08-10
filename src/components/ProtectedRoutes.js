@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import Preloader from '../components/Preloader.js';
+import Preloader from './Preloader.js';
 
 export const ProtectedRoutes = (props) => {
   const { isLoggedIn } = useContext(CurrentUserContext);

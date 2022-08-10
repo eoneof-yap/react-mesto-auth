@@ -22,12 +22,8 @@ export default function Login(props) {
     });
   }
 
-  // const hiddenClassName = `${props.isLoggedIn ? 'hidden' : ''}`; // TODO (1) remove or not
-
   return (
     <section className='auth'>
-      {/* <section className={`auth ${hiddenClassName}`}> */}{' '}
-      {/* // TODO (2)  */}
       <form
         className='form form_place_auth'
         id='login'

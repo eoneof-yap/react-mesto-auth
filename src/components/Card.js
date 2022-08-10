@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 export default function Card(props) {
-  const userInfo = useContext(CurrentUserContext);
+  const { userInfo } = useContext(CurrentUserContext);
 
   const isOwner = props.cardData.owner._id === userInfo._id ? true : false;
   const hiddenClassName = `${!isOwner ? 'hidden' : ''}`;
