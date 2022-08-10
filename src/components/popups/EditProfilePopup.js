@@ -9,7 +9,7 @@ export default function EditProfilePopup(props) {
   // Use a reference to a DOM node as `findDOMNode` is deprecated
   // which is used in `CSSTransition` internally
 
-  const userInfo = useContext(CurrentUserContext);
+  const { userInfo } = useContext(CurrentUserContext);
   const [values, setValues] = useState({ name: '', about: '' });
 
   function setInitialValues() {
