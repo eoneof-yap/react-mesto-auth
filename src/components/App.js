@@ -173,6 +173,7 @@ export default function App() {
           setIsLoggedIn(true); // triggers redirect in useEffect
         })
         .catch((err) => {
+          setIsLoggedIn(false);
           utils.requestErrorHandler(err);
         });
     }
@@ -249,6 +250,7 @@ export default function App() {
       navigate(consts.paths.root);
       getAllData();
     }
+    setPreloaderIsVisible(false);
   }, [isLoggedIn]);
 
   useEffect(() => {
