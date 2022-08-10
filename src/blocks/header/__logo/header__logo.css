@@ -1,5 +1,5 @@
 ﻿.header__logo {
-  background-image: url('../../../images/logo_white.svg');
+  background-image: url("../../../images/logo_white.svg");
   width: 142px;
   height: 33px;
   background-size: contain;
@@ -8,6 +8,7 @@
 
 @media (max-width: 375px) {
   .header__logo {
+    margin: 0 0 0 4px;
     width: 104px;
     height: 25px;
   }

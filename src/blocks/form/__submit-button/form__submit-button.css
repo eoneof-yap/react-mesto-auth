@@ -17,7 +17,7 @@
   opacity: 0.8;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 375px) {
   .form__submit-button {
     font-size: 14px;
     line-height: 1.214;

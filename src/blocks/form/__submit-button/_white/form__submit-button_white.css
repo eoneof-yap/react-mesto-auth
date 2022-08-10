@@ -1,0 +1,9 @@
+.form__submit-button_white {
+  background-color: #fff;
+  color: #000;
+  height: 50px;
+}
+
+.form__submit-button_white:hover {
+  opacity: 0.85;
+}

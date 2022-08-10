@@ -1,8 +1,11 @@
-export default function PopupWithForm(props) {
-  const openedClassName = `${props.isOpen ? 'popup_opened' : ''}`;
+import React, { forwardRef } from 'react';
+
+const PopupWithForm = forwardRef((props, ref) => {
+  // Wrap the component with forwardRef() to get
+  // a reference to a DOM node from it's parent
 
   return (
-    <section className={`popup popup_type_${props.popupType} ${openedClassName}`}>
+    <section className={`popup popup_type_${props.popupType}`} ref={ref}>
       <div className='popup__container'>
         <button
           className='button popup__close-button'
@@ -13,7 +16,7 @@ export default function PopupWithForm(props) {
           Закрыть
         </button>
         <form
-          className='form'
+          className='form form_place_popup'
           id={props.popupType}
           name={props.popupType}
           onSubmit={props.onSubmit}>
@@ -33,4 +36,6 @@ export default function PopupWithForm(props) {
       <div className='popup__backdrop' onClick={props.onClose}></div>
     </section>
   );
-}
+});
+
+export default PopupWithForm;

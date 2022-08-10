@@ -1,0 +1,12 @@
+@media (max-width: 450px) {
+  .header__menu_mobile {
+    z-index: 1;
+    opacity: 1;
+    visibility: visible;
+    margin: 0 0 26px;
+    height: inherit;
+    padding: 13px 0 40px;
+    transform-origin: top;
+    transition: all cubic-bezier(0, 0.6, 0.82, 1.03) 0.15s, opacity 0s;
+  }
+}

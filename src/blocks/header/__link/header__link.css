@@ -1,0 +1,19 @@
+.header__link {
+  margin-left: 24px;
+  font-size: 18px;
+  line-height: 1.222;
+}
+
+@media (max-width: 450px) {
+  .header__link {
+    margin: 18px 0 0 0;
+  }
+}
+
+.header__link:hover {
+  color: #fff;
+}
+
+.header__link_muted {
+  color: #a9a9a9;
+}
