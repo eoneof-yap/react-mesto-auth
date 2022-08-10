@@ -13,7 +13,6 @@ export default function Popups(props) {
   return createPortal(
     // render popups in their own div
     <div className='popups'>
-      <Preloader isVisible={props.preloaderVisible} />
       <InfoTooltip
         isOpen={props.isOpen.tooltip}
         onClose={props.onTooltipClose}

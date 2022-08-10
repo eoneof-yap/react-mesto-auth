@@ -1,10 +1,19 @@
 import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
-export const ProtectedRoutes = ({ redirectTo }) => {
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import Preloader from '../components/Preloader.js';
+
+export const ProtectedRoutes = (props) => {
   const { isLoggedIn } = useContext(CurrentUserContext);
 
-  return isLoggedIn ? <Outlet /> : <Navigate to={redirectTo} />;
-  // `Outlet` is treated as `children` in react-router 6
+  if (isLoggedIn === null) {
+    // hide login screen on first page load
+    return <Preloader preloaderIsVisible={props.preloaderIsVisible} />;
+  } else if (isLoggedIn === false) {
+    return <Navigate to={props.redirectTo} />;
+  }
+
+  return <Outlet />;
+  // Outlet = children
 };

@@ -1,19 +1,19 @@
 import { useContext, cloneElement } from 'react';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import Preloader from './Preloader.js';
 
 export default function Main(props) {
-  const { userInfo } = useContext(CurrentUserContext);
+  const { userInfo, isLoggedIn } = useContext(CurrentUserContext);
 
-  const hiddenClassName = `${props.preloaderVisible ? 'hidden' : ''}`;
+  if (!props.contentIsLoaded) {
+    return <Preloader preloaderIsVisible={props.preloaderIsVisible} />;
+  }
 
   return (
     <main className='main'>
       {/* <!-- PROFILE --> */}
-      <section
-        className={`profile ${hiddenClassName}`}
-        data-user-id=''
-        data-user-cohort=''>
+      <section className='profile' data-user-id='' data-user-cohort=''>
         <div className='profile__container'>
           <div
             className='profile__photo-container'
@@ -54,9 +54,7 @@ export default function Main(props) {
       </section>
 
       {/* <!-- CARDS WITH PHOTOS --> */}
-      <section
-        className={`photos ${hiddenClassName}`}
-        aria-label='Фотографии пользователя'>
+      <section className='photos' aria-label='Фотографии пользователя'>
         <ul className='cards-grid'>
           {props.cardsList.map((card) => {
             // clone Card child from App

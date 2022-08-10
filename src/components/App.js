@@ -28,13 +28,15 @@ export default function App() {
   };
   const [isOpen, setIsOpen] = useState(popupsStates);
   const [tooltipType, setTooltipType] = useState('');
+
   const [contentIsLoaded, setContentIsLoaded] = useState(false); // show only header and spinner until data is fetched
-  const [preloaderVisible, setPreloaderVisible] = useState(true);
+  const [preloaderIsVisible, setPreloaderIsVisible] = useState(true);
   const [cardsList, setCardsList] = useState([]);
   const [selectedCard, setSelectedCard] = useState({});
+
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [userInfo, setUserInfo] = useState({}); // from Api.js
   const [userData, setUserData] = useState({}); // from auth.js
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const api = new Api(consts.apiConfig);
@@ -60,7 +62,6 @@ export default function App() {
         setUserInfo(remoteUserData);
       })
       .then(() => {
-        setContentIsLoaded(true);
         closeAllPopups();
       })
       .catch((err) => {
@@ -75,7 +76,6 @@ export default function App() {
         setUserInfo(remoteUserData);
       })
       .then(() => {
-        setContentIsLoaded(true);
         closeAllPopups();
       })
       .catch((err) => {
@@ -90,7 +90,6 @@ export default function App() {
         setCardsList([remoteCardsData, ...cardsList]);
       })
       .then(() => {
-        setContentIsLoaded(true);
         closeAllPopups();
       })
       .catch((err) => {
@@ -150,6 +149,7 @@ export default function App() {
         if (token) {
           localStorage.setItem('jwt', token);
           setIsLoggedIn(true); // triggers redirect in useEffect
+          navigate(consts.paths.root);
         }
       })
       .catch((err) => {
@@ -180,6 +180,7 @@ export default function App() {
 
   function handleLogout() {
     localStorage.removeItem('jwt');
+    setIsLoggedIn(false);
     navigate(consts.paths.login);
   }
 
@@ -239,7 +240,7 @@ export default function App() {
 
   useEffect(() => {
     if (contentIsLoaded) {
-      setPreloaderVisible(false);
+      setPreloaderIsVisible(false);
     }
   }, [contentIsLoaded]);
 
@@ -257,9 +258,19 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={{ userInfo, isLoggedIn }}>
       <div className='page'>
-        <Header email={userData.email} onLogout={handleLogout} />
+        <Header
+          email={userData.email}
+          onLogout={handleLogout}
+          preloaderIsVisible={preloaderIsVisible}
+        />
         <Routes>
-          <Route element={<ProtectedRoutes redirectTo={consts.paths.login} />}>
+          <Route
+            element={
+              <ProtectedRoutes
+                redirectTo={consts.paths.login}
+                preloaderIsVisible={preloaderIsVisible}
+              />
+            }>
             <Route path={consts.paths.any} />
 
             <Route
@@ -267,6 +278,8 @@ export default function App() {
               path={consts.paths.root}
               element={
                 <Main
+                  preloaderIsVisible={preloaderIsVisible}
+                  contentIsLoaded={contentIsLoaded}
                   // page buttons
                   oneditAvatar={openEditAvatarPopup}
                   onEditProfile={openEditProfilePopup}
@@ -295,7 +308,6 @@ export default function App() {
         <Footer />
         <Popups
           isOpen={isOpen}
-          preloaderVisible={preloaderVisible}
           selectedCard={selectedCard}
           tooltipType={tooltipType}
           // handlers
