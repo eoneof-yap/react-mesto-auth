@@ -1,6 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 
+import Preloader from './Preloader.js';
 import EditAvatarPopup from './popups/EditAvatarPopup.js';
 import EditProfilePopup from './popups/EditProfilePopup.js';
 import AddPlacePopup from './popups/AddPlacePopup.js';

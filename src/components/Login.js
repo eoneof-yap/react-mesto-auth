@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import Preloader from './Preloader.js';
-
 export default function Login(props) {
   const [credentials, setCredentials] = useState({
     email: '',
@@ -24,12 +22,8 @@ export default function Login(props) {
     });
   }
 
-  const hiddenClassName = `${props.loggedIn ? 'hidden' : ''}`;
-
   return (
-    <section className={`auth ${hiddenClassName}`}>
-      {/* Show preloader if logged in */}
-      <Preloader preloaderVisible={!props.loggedIn} />
+    <section className='auth'>
       <form
         className='form form_place_auth'
         id='login'

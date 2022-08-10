@@ -15,7 +15,7 @@ import Login from './Login.js';
 import Register from './Register.js';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import { ProtectedRoutes } from '../utils/ProtectedRoutes.js';
+import { ProtectedRoutes } from './ProtectedRoutes.js';
 
 export default function App() {
   const popupsStates = {
@@ -27,15 +27,16 @@ export default function App() {
     tooltip: false,
   };
   const [isOpen, setIsOpen] = useState(popupsStates);
-
   const [tooltipType, setTooltipType] = useState('');
-  const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
-  const [preloaderVisible, setPreloaderVisible] = useState(true);
-  const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
+
+  const [contentIsLoaded, setContentIsLoaded] = useState(false); // show only header and spinner until data is fetched
+  const [preloaderIsVisible, setPreloaderIsVisible] = useState(true);
+  const [cardsList, setCardsList] = useState([]);
   const [selectedCard, setSelectedCard] = useState({});
-  const [currentUser, setCurrentUser] = useState({}); // TODO remove - replace with userInfo
-  const [userInfo, setuserInfo] = useState({});
-  const [loggedIn, setLoggedIn] = useState(false);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [userInfo, setUserInfo] = useState({}); // from Api.js
+  const [userData, setUserData] = useState({}); // from auth.js
   const navigate = useNavigate();
 
   const api = new Api(consts.apiConfig);
@@ -43,11 +44,11 @@ export default function App() {
   function getAllData() {
     Promise.all([api.getUserInfo(), api.getCardsList()])
       .then(([remoteUserData, remoteCardsData]) => {
-        setCurrentUser(remoteUserData);
+        setUserInfo(remoteUserData);
         setCardsList(remoteCardsData);
       })
       .then(() => {
-        setAllDataIsLoaded(true);
+        setContentIsLoaded(true);
       })
       .catch((err) => {
         utils.requestErrorHandler(err);
@@ -58,10 +59,9 @@ export default function App() {
     api
       .setAvatar(inputValue)
       .then((remoteUserData) => {
-        setCurrentUser(remoteUserData);
+        setUserInfo(remoteUserData);
       })
       .then(() => {
-        setAllDataIsLoaded(true);
         closeAllPopups();
       })
       .catch((err) => {
@@ -73,10 +73,9 @@ export default function App() {
     api
       .setUserInfo(inputValues)
       .then((remoteUserData) => {
-        setCurrentUser(remoteUserData);
+        setUserInfo(remoteUserData);
       })
       .then(() => {
-        setAllDataIsLoaded(true);
         closeAllPopups();
       })
       .catch((err) => {
@@ -91,7 +90,6 @@ export default function App() {
         setCardsList([remoteCardsData, ...cardsList]);
       })
       .then(() => {
-        setAllDataIsLoaded(true);
         closeAllPopups();
       })
       .catch((err) => {
@@ -100,7 +98,7 @@ export default function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((liker) => liker._id === currentUser._id);
+    const isLiked = card.likes.some((liker) => liker._id === userInfo._id);
     api
       .toggleCardLike(card._id, isLiked)
       .then((newCard) => {
@@ -150,7 +148,8 @@ export default function App() {
       .then(({ token }) => {
         if (token) {
           localStorage.setItem('jwt', token);
-          setLoggedIn(true); // triggers redirect in useEffect
+          setIsLoggedIn(true); // triggers redirect in useEffect
+          navigate(consts.paths.root);
         }
       })
       .catch((err) => {
@@ -170,8 +169,8 @@ export default function App() {
           return res.json();
         })
         .then(({ data }) => {
-          setuserInfo(data);
-          setLoggedIn(true); // triggers redirect in useEffect
+          setUserData(data);
+          setIsLoggedIn(true); // triggers redirect in useEffect
         })
         .catch((err) => {
           utils.requestErrorHandler(err);
@@ -181,6 +180,7 @@ export default function App() {
 
   function handleLogout() {
     localStorage.removeItem('jwt');
+    setIsLoggedIn(false);
     navigate(consts.paths.login);
   }
 
@@ -239,30 +239,37 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (loggedIn && allDataIsLoaded) {
-      setPreloaderVisible(false);
+    if (contentIsLoaded) {
+      setPreloaderIsVisible(false);
     }
-  }, [loggedIn, allDataIsLoaded]);
+  }, [contentIsLoaded]);
 
   useEffect(() => {
-    if (loggedIn) {
+    if (isLoggedIn) {
       navigate(consts.paths.root);
       getAllData();
     }
-  }, [loggedIn]);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     checkToken();
   }, []);
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <CurrentUserContext.Provider value={{ userInfo, isLoggedIn }}>
       <div className='page'>
-        <Header email={userInfo.email} onLogout={handleLogout} />
+        <Header
+          email={userData.email}
+          onLogout={handleLogout}
+          preloaderIsVisible={preloaderIsVisible}
+        />
         <Routes>
           <Route
             element={
-              <ProtectedRoutes loggedIn={loggedIn} redirectTo={consts.paths.login} />
+              <ProtectedRoutes
+                redirectTo={consts.paths.login}
+                preloaderIsVisible={preloaderIsVisible}
+              />
             }>
             <Route path={consts.paths.any} />
 
@@ -271,7 +278,8 @@ export default function App() {
               path={consts.paths.root}
               element={
                 <Main
-                  preloaderVisible={preloaderVisible}
+                  preloaderIsVisible={preloaderIsVisible}
+                  contentIsLoaded={contentIsLoaded}
                   // page buttons
                   oneditAvatar={openEditAvatarPopup}
                   onEditProfile={openEditProfilePopup}
@@ -294,7 +302,7 @@ export default function App() {
           />
           <Route
             path={consts.paths.login}
-            element={<Login onSubmit={handleLogin} loggedIn={loggedIn} />}
+            element={<Login onSubmit={handleLogin} />}
           />
         </Routes>
         <Footer />

@@ -5,7 +5,7 @@ import closeButtonIcon from '../images/closeButton.svg';
 import menuButtonIcon from '../images/burger-menu-icon.svg';
 import { paths } from '../utils/constants.js';
 
-export default function Header({ email, onLogout }) {
+export default function Header({ email, onLogout, preloaderIsVisible }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const visibleMenuClass = isMenuOpen ? `${'header__menu_mobile'}` : '';
   const menuButtonBgImage = isMenuOpen
