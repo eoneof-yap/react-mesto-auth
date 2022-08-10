@@ -7,7 +7,6 @@ export default function Register(props) {
     password: '',
   });
 
-  // TODO: refactor with real data
   function handleSubmit(evt) {
     evt.preventDefault();
     props.onSubmit(credentials);

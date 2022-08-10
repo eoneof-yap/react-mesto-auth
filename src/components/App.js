@@ -1,25 +1,23 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import Api from '../utils/Api.js';
+import * as auth from '../utils/auth.js';
 import * as utils from '../utils/utils.js';
 import * as consts from '../utils/constants.js';
-import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import { PrivateRoutes } from '../utils/PrivateRoutes.js';
 
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
-import Preloader from './Preloader.js';
 import Popups from './Popups.js';
 import Card from './Card.js';
 import Login from './Login.js';
 import Register from './Register.js';
-import * as aooth from '../utils/auth.js';
+
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import { ProtectedRoutes } from '../utils/ProtectedRoutes.js';
 
 export default function App() {
-  let auth = { token: false, email: 'kzistof@mail.com' }; // TODO get from api
-
   const popupsStates = {
     editAvatar: false,
     editProfile: false,
@@ -28,12 +26,17 @@ export default function App() {
     confirmDelete: false,
     tooltip: false,
   };
-
   const [isOpen, setIsOpen] = useState(popupsStates);
+
+  const [tooltipType, setTooltipType] = useState('');
   const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
-  const [currentUser, setCurrentUser] = useState({});
+  const [preloaderVisible, setPreloaderVisible] = useState(true);
   const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
   const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({}); // TODO remove - replace with userInfo
+  const [userInfo, setuserInfo] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const api = new Api(consts.apiConfig);
 
@@ -126,18 +129,59 @@ export default function App() {
       });
   }
 
-  function handleRegister(data) {
-    aooth.register(data).then((res) => {
-      res.status === 201 ? openInfoToolTip(true) : openInfoToolTip(false);
-    });
+  function handleRegister(credentials) {
+    return auth
+      .register(credentials)
+      .then((res) => {
+        showTooltip('success');
+      })
+      .catch((err) => {
+        showTooltip('error');
+        utils.requestErrorHandler(err);
+      });
   }
 
-  function clearSelectedCard() {
-    setSelectedCard({});
+  function handleLogin(credentials) {
+    return auth
+      .authorize(credentials)
+      .then((res) => {
+        return res.json();
+      })
+      .then(({ token }) => {
+        if (token) {
+          localStorage.setItem('jwt', token);
+          setLoggedIn(true); // triggers redirect in useEffect
+        }
+      })
+      .catch((err) => {
+        showTooltip('error');
+        utils.requestErrorHandler(err);
+      });
   }
 
-  function openInfoToolTip(state) {
-    updateOpenedState('tooltip', state);
+  function checkToken() {
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) {
+      return;
+    } else {
+      auth
+        .getUserInfo(jwt)
+        .then((res) => {
+          return res.json();
+        })
+        .then(({ data }) => {
+          setuserInfo(data);
+          setLoggedIn(true); // triggers redirect in useEffect
+        })
+        .catch((err) => {
+          utils.requestErrorHandler(err);
+        });
+    }
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('jwt');
+    navigate(consts.paths.login);
   }
 
   function updateOpenedState(key, value) {
@@ -149,6 +193,18 @@ export default function App() {
     setIsOpen(popupsStates);
   }
 
+  function showTooltip(type) {
+    setTooltipType(type);
+    updateOpenedState('tooltip', true);
+  }
+
+  function handleTooltipClose(type) {
+    closeAllPopups();
+    if (type === 'success') {
+      navigate(consts.paths.login);
+    }
+  }
+
   function closeAllPopups() {
     for (const item in popupsStates) {
       popupsStates[item] = false;
@@ -156,7 +212,7 @@ export default function App() {
     setIsOpen(popupsStates);
   }
 
-  function openeditAvatarPopup() {
+  function openEditAvatarPopup() {
     updateOpenedState('editAvatar', true);
   }
 
@@ -178,26 +234,46 @@ export default function App() {
     setSelectedCard(cardData);
   }
 
+  function clearSelectedCard() {
+    setSelectedCard({});
+  }
+
   useEffect(() => {
-    getAllData();
+    if (loggedIn && allDataIsLoaded) {
+      setPreloaderVisible(false);
+    }
+  }, [loggedIn, allDataIsLoaded]);
+
+  useEffect(() => {
+    if (loggedIn) {
+      navigate(consts.paths.root);
+      getAllData();
+    }
+  }, [loggedIn]);
+
+  useEffect(() => {
+    checkToken();
   }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
-        <Header authData={auth} paths={consts.paths} />
+        <Header email={userInfo.email} onLogout={handleLogout} />
         <Routes>
-          <Route element={<PrivateRoutes token={auth.token} />}>
+          <Route
+            element={
+              <ProtectedRoutes loggedIn={loggedIn} redirectTo={consts.paths.login} />
+            }>
             <Route path={consts.paths.any} />
+
             <Route
               exact
               path={consts.paths.root}
               element={
                 <Main
-                  allDataIsLoaded={allDataIsLoaded}
-                  preloaderComponent={<Preloader />}
+                  preloaderVisible={preloaderVisible}
                   // page buttons
-                  oneditAvatar={openeditAvatarPopup}
+                  oneditAvatar={openEditAvatarPopup}
                   onEditProfile={openEditProfilePopup}
                   onAddCard={openNewCardPopup}
                   // cards
@@ -210,35 +286,30 @@ export default function App() {
               }
             />
           </Route>
-          {/* REGULAR ROUTES */}
+
+          {/* PUBLIC ROUTES */}
           <Route
             path={consts.paths.register}
             element={<Register onSubmit={handleRegister} />}
           />
           <Route
             path={consts.paths.login}
-            element={
-              <Login
-                onSubmit={() => {
-                  console.log('Logged In');
-                }}
-              />
-            }
+            element={<Login onSubmit={handleLogin} loggedIn={loggedIn} />}
           />
         </Routes>
         <Footer />
         <Popups
           isOpen={isOpen}
           selectedCard={selectedCard}
+          tooltipType={tooltipType}
           // handlers
+          onTooltipClose={handleTooltipClose}
           clearSelectedCard={clearSelectedCard}
-          onSubmitCardDelete={handleCardDelete}
           onSubmitAvatar={handleAvatarSubmit}
           onSubmitUser={handleUserInfoSubmit}
           onSubmitNewPlace={handleNewPlaceSubmit}
+          onSubmitCardDelete={handleCardDelete}
           onClose={closeAllPopups}
-          // TODO: redirect to Login on close or after timeout ~5s (???)
-          // onTooltipClose={redirect}
         />
       </div>
     </CurrentUserContext.Provider>

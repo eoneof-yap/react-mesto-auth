@@ -27,12 +27,12 @@ export function authorize({ email, password }) {
   });
 }
 
-export function getUserInfo(token) {
+export function getUserInfo(jwt) {
   return fetch(`${cfg.BASE_URL}/${cfg.USER}`, {
     method: 'GET',
     headers: {
       ...cfg.HEADERS,
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${jwt}`,
     },
   }).then((res) => {
     return handleResponse(res);
