@@ -9,14 +9,9 @@
   text-align: left;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 375px) {
   .form__header {
     margin: 0 0 68px 0;
-  }
-}
-
-@media (max-width: 450px) {
-  .form__header {
     font-size: 18px;
     line-height: 22px;
   }

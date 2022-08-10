@@ -1,0 +1,9 @@
+.form__fieldset_on-dark {
+  margin-bottom: 193px;
+}
+
+@media (max-width: 450px) {
+  .form__fieldset_on-dark {
+    margin-bottom: 173px;
+  }
+}

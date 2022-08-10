@@ -1,8 +1,9 @@
 ﻿.preview__image {
-  width: max(300px, 75vw);
   object-position: center;
   object-fit: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-color: #000;
+  max-width: 75vw;
+  max-height: 75vh;
 }

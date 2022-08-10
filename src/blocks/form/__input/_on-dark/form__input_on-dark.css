@@ -1,0 +1,12 @@
+.form__input_on-dark {
+  border-bottom: 2px solid #cccccc;
+  color: #fff;
+}
+
+.form__input_on-dark:focus {
+  border-bottom: 2px solid #fff;
+}
+
+.form__input_on-dark::placeholder {
+  color: #cccccc;
+}

@@ -1,3 +1,4 @@
 ﻿.form__input-container {
   position: relative;
+  /* relative to error hints */
 }

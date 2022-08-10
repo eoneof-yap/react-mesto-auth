@@ -15,6 +15,7 @@ module.exports = {
       2,
       'always',
       [
+        'wip',
         'feat',
         'fix',
         'docs',

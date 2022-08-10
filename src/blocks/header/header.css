@@ -5,16 +5,19 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  position: relative;
 }
 
 @media (max-width: 450px) {
   .header {
     padding: 28px 0 30px;
+    flex-direction: column-reverse;
   }
 }
 
 @media (max-width: 375px) {
   .header {
-    width: calc(100% - 14px);
+    padding-left: 7px;
+    padding-right: 7px;
   }
 }

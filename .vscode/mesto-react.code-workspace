@@ -8,5 +8,10 @@
       "name": "[ src ] =========",
       "path": "../src/"
     }
-  ]
+  ],
+  "settings": {
+    "workbench.colorCustomizations": {
+      "titleBar.inactiveBackground": "#58001b"
+    }
+  }
 }

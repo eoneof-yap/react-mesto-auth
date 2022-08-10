@@ -1,0 +1,24 @@
+.header__menu {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (max-width: 450px) {
+  .header__menu {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all cubic-bezier(0, 0.6, 0.82, 1.03) 0.3s, opacity 0s;
+  }
+}
