@@ -271,8 +271,7 @@ export default function App() {
               path={consts.paths.root}
               element={
                 <Main
-                  allDataIsLoaded={allDataIsLoaded}
-                  preloader={preloaderVisible}
+                  preloaderVisible={preloaderVisible}
                   // page buttons
                   oneditAvatar={openEditAvatarPopup}
                   onEditProfile={openEditProfilePopup}
@@ -295,7 +294,7 @@ export default function App() {
           />
           <Route
             path={consts.paths.login}
-            element={<Login onSubmit={handleLogin} preloader={preloaderVisible} />}
+            element={<Login onSubmit={handleLogin} loggedIn={loggedIn} />}
           />
         </Routes>
         <Footer />

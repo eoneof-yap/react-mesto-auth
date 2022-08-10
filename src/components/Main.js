@@ -6,11 +6,11 @@ import Preloader from './Preloader.js';
 export default function Main(props) {
   const currentUser = useContext(CurrentUserContext);
 
-  const hiddenClassName = `${!props.allDataIsLoaded ? 'hidden' : ''}`;
+  const hiddenClassName = `${props.preloaderVisible ? 'hidden' : ''}`;
 
   return (
     <main className='main'>
-      <Preloader hidePreloader={props.preloader} />
+      <Preloader preloaderVisible={props.preloaderVisible} />
 
       {/* <!-- PROFILE --> */}
       <section

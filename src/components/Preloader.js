@@ -1,5 +1,5 @@
-export default function Preloader({ hidePreloader }) {
-  const hiddenClassName = `${hidePreloader ? '' : 'hidden'}`;
+export default function Preloader({ preloaderVisible }) {
+  const hiddenClassName = `${preloaderVisible ? '' : 'hidden'}`;
 
   return (
     <div className={`preloader ${hiddenClassName}`}>
