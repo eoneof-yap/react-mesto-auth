@@ -27,15 +27,14 @@ export default function App() {
     tooltip: false,
   };
   const [isOpen, setIsOpen] = useState(popupsStates);
-
   const [tooltipType, setTooltipType] = useState('');
-  const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
+  const [contentIsLoaded, setContentIsLoaded] = useState(false); // show only header and spinner until data is fetched
   const [preloaderVisible, setPreloaderVisible] = useState(true);
-  const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
+  const [cardsList, setCardsList] = useState([]);
   const [selectedCard, setSelectedCard] = useState({});
-  const [currentUser, setCurrentUser] = useState({}); // TODO remove - replace with userInfo
-  const [userInfo, setuserInfo] = useState({});
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState({}); // from Api.js
+  const [userData, setUserData] = useState({}); // from auth.js
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const api = new Api(consts.apiConfig);
@@ -43,11 +42,11 @@ export default function App() {
   function getAllData() {
     Promise.all([api.getUserInfo(), api.getCardsList()])
       .then(([remoteUserData, remoteCardsData]) => {
-        setCurrentUser(remoteUserData);
+        setUserInfo(remoteUserData);
         setCardsList(remoteCardsData);
       })
       .then(() => {
-        setAllDataIsLoaded(true);
+        setContentIsLoaded(true);
       })
       .catch((err) => {
         utils.requestErrorHandler(err);
@@ -58,10 +57,10 @@ export default function App() {
     api
       .setAvatar(inputValue)
       .then((remoteUserData) => {
-        setCurrentUser(remoteUserData);
+        setUserInfo(remoteUserData);
       })
       .then(() => {
-        setAllDataIsLoaded(true);
+        setContentIsLoaded(true);
         closeAllPopups();
       })
       .catch((err) => {
@@ -73,10 +72,10 @@ export default function App() {
     api
       .setUserInfo(inputValues)
       .then((remoteUserData) => {
-        setCurrentUser(remoteUserData);
+        setUserInfo(remoteUserData);
       })
       .then(() => {
-        setAllDataIsLoaded(true);
+        setContentIsLoaded(true);
         closeAllPopups();
       })
       .catch((err) => {
@@ -91,7 +90,7 @@ export default function App() {
         setCardsList([remoteCardsData, ...cardsList]);
       })
       .then(() => {
-        setAllDataIsLoaded(true);
+        setContentIsLoaded(true);
         closeAllPopups();
       })
       .catch((err) => {
@@ -100,7 +99,7 @@ export default function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((liker) => liker._id === currentUser._id);
+    const isLiked = card.likes.some((liker) => liker._id === userInfo._id);
     api
       .toggleCardLike(card._id, isLiked)
       .then((newCard) => {
@@ -150,7 +149,7 @@ export default function App() {
       .then(({ token }) => {
         if (token) {
           localStorage.setItem('jwt', token);
-          setLoggedIn(true); // triggers redirect in useEffect
+          setIsLoggedIn(true); // triggers redirect in useEffect
         }
       })
       .catch((err) => {
@@ -170,8 +169,8 @@ export default function App() {
           return res.json();
         })
         .then(({ data }) => {
-          setuserInfo(data);
-          setLoggedIn(true); // triggers redirect in useEffect
+          setUserData(data);
+          setIsLoggedIn(true); // triggers redirect in useEffect
         })
         .catch((err) => {
           utils.requestErrorHandler(err);
@@ -239,31 +238,28 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (loggedIn && allDataIsLoaded) {
+    if (contentIsLoaded) {
       setPreloaderVisible(false);
     }
-  }, [loggedIn, allDataIsLoaded]);
+  }, [contentIsLoaded]);
 
   useEffect(() => {
-    if (loggedIn) {
+    if (isLoggedIn) {
       navigate(consts.paths.root);
       getAllData();
     }
-  }, [loggedIn]);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     checkToken();
   }, []);
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <CurrentUserContext.Provider value={{ userInfo, isLoggedIn }}>
       <div className='page'>
-        <Header email={userInfo.email} onLogout={handleLogout} />
+        <Header email={userData.email} onLogout={handleLogout} />
         <Routes>
-          <Route
-            element={
-              <ProtectedRoutes loggedIn={loggedIn} redirectTo={consts.paths.login} />
-            }>
+          <Route element={<ProtectedRoutes redirectTo={consts.paths.login} />}>
             <Route path={consts.paths.any} />
 
             <Route
@@ -271,7 +267,6 @@ export default function App() {
               path={consts.paths.root}
               element={
                 <Main
-                  preloaderVisible={preloaderVisible}
                   // page buttons
                   oneditAvatar={openEditAvatarPopup}
                   onEditProfile={openEditProfilePopup}
@@ -294,12 +289,13 @@ export default function App() {
           />
           <Route
             path={consts.paths.login}
-            element={<Login onSubmit={handleLogin} loggedIn={loggedIn} />}
+            element={<Login onSubmit={handleLogin} />}
           />
         </Routes>
         <Footer />
         <Popups
           isOpen={isOpen}
+          preloaderVisible={preloaderVisible}
           selectedCard={selectedCard}
           tooltipType={tooltipType}
           // handlers
