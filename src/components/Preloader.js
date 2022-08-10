@@ -1,5 +1,5 @@
-export default function Preloader(props) {
-  const hiddenClassName = `${props.dataIsLoaded ? 'hidden' : ''}`;
+export default function Preloader({ hidePreloader }) {
+  const hiddenClassName = `${hidePreloader ? '' : 'hidden'}`;
 
   return (
     <div className={`preloader ${hiddenClassName}`}>

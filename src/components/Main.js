@@ -1,6 +1,7 @@
 import { useContext, cloneElement } from 'react';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import Preloader from './Preloader.js';
 
 export default function Main(props) {
   const currentUser = useContext(CurrentUserContext);
@@ -9,10 +10,7 @@ export default function Main(props) {
 
   return (
     <main className='main'>
-      {cloneElement(props.preloaderComponent, {
-        dataIsLoaded: props.allDataIsLoaded,
-        // show preloader while `false`
-      })}
+      <Preloader hidePreloader={props.preloader} />
 
       {/* <!-- PROFILE --> */}
       <section
@@ -25,10 +23,7 @@ export default function Main(props) {
             type='button'
             name='update-profile-photo-button'
             title='Изменить фотографию профиля'>
-            <button
-              className='profile__photo-overlay'
-              onClick={props.oneditAvatar}
-            />
+            <button className='profile__photo-overlay' onClick={props.oneditAvatar} />
             <img
               className='profile__photo'
               alt='Фотография пользователя.'

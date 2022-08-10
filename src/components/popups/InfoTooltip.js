@@ -43,9 +43,7 @@ export default function InfoTooltip(props) {
       timeout={200}
       classNames='popup_opened'
       unmountOnExit={true}>
-      <section
-        className={`popup popup_type_${props.tooltipType}`}
-        ref={nodeRef}>
+      <section className={`popup popup_type_${props.tooltipType}`} ref={nodeRef}>
         <div className='popup__container'>
           <button
             className='button popup__close-button'

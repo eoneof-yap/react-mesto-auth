@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, cloneElement } from 'react';
+
+import Preloader from './Preloader.js';
 
 export default function Login(props) {
   const [credentials, setCredentials] = useState({
@@ -24,6 +26,8 @@ export default function Login(props) {
 
   return (
     <section className='auth'>
+      {/* Show preloader if not logged in */}
+      <Preloader hidePreloader={props.preloader} />
       <form
         className='form form_place_auth'
         id='login'

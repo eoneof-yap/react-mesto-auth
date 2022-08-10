@@ -9,7 +9,6 @@ import * as consts from '../utils/constants.js';
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
-import Preloader from './Preloader.js';
 import Popups from './Popups.js';
 import Card from './Card.js';
 import Login from './Login.js';
@@ -18,20 +17,20 @@ import Register from './Register.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import { ProtectedRoutes } from '../utils/ProtectedRoutes.js';
 
-const popupsStates = {
-  editAvatar: false,
-  editProfile: false,
-  addCard: false,
-  viewImage: false,
-  confirmDelete: false,
-  tooltip: false,
-};
-
 export default function App() {
+  const popupsStates = {
+    editAvatar: false,
+    editProfile: false,
+    addCard: false,
+    viewImage: false,
+    confirmDelete: false,
+    tooltip: false,
+  };
   const [isOpen, setIsOpen] = useState(popupsStates);
 
   const [tooltipType, setTooltipType] = useState('');
   const [allDataIsLoaded, setAllDataIsLoaded] = useState(false); // show only header and spinner until data is fetched
+  const [preloaderVisible, setPreloaderVisible] = useState(true);
   const [cardsList, setCardsList] = useState([]); // pass to ImagePopup
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({}); // TODO remove - replace with userInfo
@@ -48,8 +47,6 @@ export default function App() {
         setCardsList(remoteCardsData);
       })
       .then(() => {
-        // TODO show preloader on root when logged in
-        // FIXME Login screen is shown for a bit
         setAllDataIsLoaded(true);
       })
       .catch((err) => {
@@ -136,10 +133,10 @@ export default function App() {
     return auth
       .register(credentials)
       .then((res) => {
-        toggleTooltip('success', true);
+        showTooltip('success');
       })
       .catch((err) => {
-        toggleTooltip('error', true);
+        showTooltip('error');
         utils.requestErrorHandler(err);
       });
   }
@@ -157,7 +154,7 @@ export default function App() {
         }
       })
       .catch((err) => {
-        toggleTooltip('error', true);
+        showTooltip('error');
         utils.requestErrorHandler(err);
       });
   }
@@ -174,7 +171,6 @@ export default function App() {
         })
         .then(({ data }) => {
           setuserInfo(data);
-          console.log('userInfo:', userInfo);
           setLoggedIn(true); // triggers redirect in useEffect
         })
         .catch((err) => {
@@ -197,23 +193,19 @@ export default function App() {
     setIsOpen(popupsStates);
   }
 
-  function toggleTooltip(type, state) {
+  function showTooltip(type) {
     setTooltipType(type);
-    updateOpenedState('tooltip', state);
+    updateOpenedState('tooltip', true);
   }
 
   function handleTooltipClose(type) {
     closeAllPopups();
     if (type === 'success') {
       navigate(consts.paths.login);
-    } else if (type === 'error') {
-      // fixme close tooltip
-      toggleTooltip('error', false);
     }
   }
 
   function closeAllPopups() {
-    // FIXME remove tooltip from object ?? it has it's own toggle
     for (const item in popupsStates) {
       popupsStates[item] = false;
     }
@@ -247,8 +239,16 @@ export default function App() {
   }
 
   useEffect(() => {
-    loggedIn && navigate(consts.paths.root);
-    getAllData();
+    if (loggedIn && allDataIsLoaded) {
+      setPreloaderVisible(false);
+    }
+  }, [loggedIn, allDataIsLoaded]);
+
+  useEffect(() => {
+    if (loggedIn) {
+      navigate(consts.paths.root);
+      getAllData();
+    }
   }, [loggedIn]);
 
   useEffect(() => {
@@ -262,10 +262,7 @@ export default function App() {
         <Routes>
           <Route
             element={
-              <ProtectedRoutes
-                loggedIn={loggedIn}
-                redirectTo={consts.paths.login}
-              />
+              <ProtectedRoutes loggedIn={loggedIn} redirectTo={consts.paths.login} />
             }>
             <Route path={consts.paths.any} />
 
@@ -275,7 +272,7 @@ export default function App() {
               element={
                 <Main
                   allDataIsLoaded={allDataIsLoaded}
-                  preloaderComponent={<Preloader />}
+                  preloader={preloaderVisible}
                   // page buttons
                   oneditAvatar={openEditAvatarPopup}
                   onEditProfile={openEditProfilePopup}
@@ -298,7 +295,7 @@ export default function App() {
           />
           <Route
             path={consts.paths.login}
-            element={<Login onSubmit={handleLogin} />}
+            element={<Login onSubmit={handleLogin} preloader={preloaderVisible} />}
           />
         </Routes>
         <Footer />
