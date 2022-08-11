@@ -8,7 +8,7 @@ export default function AddPlacePopup(props) {
   // Use a reference to a DOM node as `findDOMNode` is deprecated
   // which is used in `CSSTransition` internally
 
-  const [values, setValues] = useState({ title: '', link: '' });
+  const [values, setValues] = useState({ name: '', link: '' });
 
   function handleChanges(evt) {
     // extract target input's attributes
@@ -24,10 +24,8 @@ export default function AddPlacePopup(props) {
   function handleSubmit(evt) {
     evt.preventDefault();
     props.onSubmit(values);
-    setValues({});
   }
 
-  useEffect(() => {
   useEffect(() => {
     props.isOpen && setValues({ name: '', link: '' });
   }, [props.isOpen]);
