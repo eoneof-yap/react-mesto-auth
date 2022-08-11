@@ -11,8 +11,7 @@ import Main from './Main.js';
 import Footer from './Footer.js';
 import Popups from './Popups.js';
 import Card from './Card.js';
-import Login from './Login.js';
-import Register from './Register.js';
+import AuthForm from './AuthForm.js';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import { ProtectedRoutes } from './ProtectedRoutes.js';
@@ -281,10 +280,13 @@ export default function App() {
 
           {/* PUBLIC ROUTES */}
           <Route
-            path={consts.paths.register}
-            element={<Register onSubmit={handleRegister} />}
+            path={`${consts.paths.register}/*`}
+            element={<AuthForm onSubmit={handleRegister} formType='register' />}
           />
-          <Route path={consts.paths.login} element={<Login onSubmit={handleLogin} />} />
+          <Route
+            path={`${consts.paths.login}/*`}
+            element={<AuthForm onSubmit={handleLogin} formType='login' />}
+          />
         </Routes>
         <Footer />
         <Popups

@@ -1,8 +1,9 @@
-// TODO delete file
-
 import React, { useState } from 'react';
+import { Link, Routes, Route } from 'react-router-dom';
 
-export default function Login(props) {
+import { paths } from '../utils/constants.js';
+
+export default function AuthForm({ onSubmit, formType }) {
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -10,7 +11,7 @@ export default function Login(props) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    props.onSubmit(credentials);
+    onSubmit(credentials);
   }
 
   function handleChanges(evt) {
@@ -25,14 +26,14 @@ export default function Login(props) {
   }
 
   return (
-    <section className='auth'>
+    <section className='auth auth_place_register'>
       <form
         className='form form_place_auth'
-        id='login'
-        name='login'
-        action='login'
+        id={formType}
+        name={formType}
+        action={formType}
         onSubmit={handleSubmit}>
-        <h2 className='form__header form__header_on-dark'>Вход</h2>
+        <h2 className='form__header form__header_on-dark'>Регистрация</h2>
         <fieldset className='form__fieldset form__fieldset_on-dark'>
           <div className='form__input-container'>
             <input
@@ -52,9 +53,8 @@ export default function Login(props) {
               placeholder='Пароль'
               name='password'
               type='password'
-              minLength='8'
               required
-              autoComplete='current-password'
+              autoComplete='new-password'
               onChange={handleChanges}
               value={credentials.password}
             />
@@ -63,9 +63,36 @@ export default function Login(props) {
         <button
           className='button form__submit-button form__submit-button_white'
           type='submit'
-          form='login'>
-          <span>Войти</span>
+          form={formType}>
+          <span>Зарегистрироваться</span>
         </button>
+        <Routes>
+          {/* FIXME: does not render */}
+          <Route
+            exact
+            path={paths.register}
+            element={
+              <div className='form__link'>
+                Уже зарегистрированы?
+                <Link className='link form__link_link' to={paths.login}>
+                  Войти
+                </Link>
+              </div>
+            }
+          />
+          <Route
+            exact
+            path={paths.register}
+            element={
+              <div className='form__link'>
+                Уже зарегистрированы?
+                <Link className='link form__link_link' to={paths.login}>
+                  Войти
+                </Link>
+              </div>
+            }
+          />
+        </Routes>
       </form>
     </section>
   );
