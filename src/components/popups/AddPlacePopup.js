@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import PopupWithForm from './PopupWithForm.js';
@@ -8,25 +8,27 @@ export default function AddPlacePopup(props) {
   // Use a reference to a DOM node as `findDOMNode` is deprecated
   // which is used in `CSSTransition` internally
 
-  const titleInputRef = useRef();
-  const linkInputRef = useRef();
+  const [values, setValues] = useState({ title: '', link: '' });
 
-  function handleSubmit(evt) {
-    evt.preventDefault();
+  function handleChanges(evt) {
+    // extract target input's attributes
+    const { name, value } = evt.target;
 
-    props.onSubmit({
-      name: titleInputRef.current.value,
-      link: linkInputRef.current.value,
+    // set it's name as key and it's value as value
+    setValues({
+      ...values,
+      [name]: value,
     });
   }
 
-  function resetValues() {
-    titleInputRef.current.value = '';
-    linkInputRef.current.value = '';
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    props.onSubmit(values);
+    setValues({});
   }
 
   useEffect(() => {
-    props.isOpen && resetValues();
+    props.isOpen && setValues({});
   }, [props.isOpen]);
 
   return (
@@ -55,7 +57,8 @@ export default function AddPlacePopup(props) {
               minLength='2'
               maxLength='30'
               placeholder='Название'
-              ref={titleInputRef}
+              onChange={handleChanges}
+              value={values.title}
               required
             />
             <span className='form__input-error-hint name-input-error'></span>
@@ -67,7 +70,8 @@ export default function AddPlacePopup(props) {
               name='link'
               type='url'
               placeholder='Ссылка на картинку'
-              ref={linkInputRef}
+              onChange={handleChanges}
+              value={values.link}
               required
             />
             <span className='form__input-error-hint about-input-error'></span>
