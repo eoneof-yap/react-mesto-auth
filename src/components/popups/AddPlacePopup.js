@@ -28,7 +28,8 @@ export default function AddPlacePopup(props) {
   }
 
   useEffect(() => {
-    props.isOpen && setValues({});
+  useEffect(() => {
+    props.isOpen && setValues({ name: '', link: '' });
   }, [props.isOpen]);
 
   return (
@@ -58,7 +59,7 @@ export default function AddPlacePopup(props) {
               maxLength='30'
               placeholder='Название'
               onChange={handleChanges}
-              value={values.title}
+              value={values.name}
               required
             />
             <span className='form__input-error-hint name-input-error'></span>
