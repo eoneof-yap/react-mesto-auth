@@ -12,7 +12,7 @@ export const ProtectedRoutes = (props) => {
   // FIXME: hide login screen on page load if logged in !!!
   // if (isLoggedIn === null) {
   //   // hide login screen on first page load
-  //   return <Preloader preloaderIsVisible={props.preloaderIsVisible} />;
+  //   return <Preloader />;
   // } else if (isLoggedIn === false) {
   //   return <Navigate to={props.redirectTo} />;
   // }

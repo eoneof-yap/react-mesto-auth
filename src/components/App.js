@@ -30,7 +30,6 @@ export default function App() {
   const [tooltipType, setTooltipType] = useState('');
 
   const [contentIsLoaded, setContentIsLoaded] = useState(false); // show only header and spinner until data is fetched
-  const [preloaderIsVisible, setPreloaderIsVisible] = useState(true);
   const [cardsList, setCardsList] = useState([]);
   const [selectedCard, setSelectedCard] = useState({});
 
@@ -240,17 +239,11 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (contentIsLoaded) {
-      setPreloaderIsVisible(false);
-    }
-  }, [contentIsLoaded]);
-
-  useEffect(() => {
     if (isLoggedIn) {
       navigate(consts.paths.root);
       getAllData();
     }
-    setPreloaderIsVisible(false);
+    checkToken();
   }, [isLoggedIn]);
 
   useEffect(() => {
@@ -258,21 +251,11 @@ export default function App() {
   }, []);
 
   return (
-    <CurrentUserContext.Provider value={{ userInfo, isLoggedIn }}>
+    <CurrentUserContext.Provider value={{ userData, userInfo, isLoggedIn }}>
       <div className='page'>
-        <Header
-          email={userData.email}
-          onLogout={handleLogout}
-          preloaderIsVisible={preloaderIsVisible}
-        />
+        <Header onLogout={handleLogout} />
         <Routes>
-          <Route
-            element={
-              <ProtectedRoutes
-                redirectTo={consts.paths.login}
-                preloaderIsVisible={preloaderIsVisible}
-              />
-            }>
+          <Route element={<ProtectedRoutes redirectTo={consts.paths.login} />}>
             <Route path={consts.paths.any} />
 
             <Route
@@ -280,7 +263,6 @@ export default function App() {
               path={consts.paths.root}
               element={
                 <Main
-                  preloaderIsVisible={preloaderIsVisible}
                   contentIsLoaded={contentIsLoaded}
                   // page buttons
                   oneditAvatar={openEditAvatarPopup}
@@ -302,10 +284,7 @@ export default function App() {
             path={consts.paths.register}
             element={<Register onSubmit={handleRegister} />}
           />
-          <Route
-            path={consts.paths.login}
-            element={<Login onSubmit={handleLogin} />}
-          />
+          <Route path={consts.paths.login} element={<Login onSubmit={handleLogin} />} />
         </Routes>
         <Footer />
         <Popups

@@ -4,10 +4,10 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import Preloader from './Preloader.js';
 
 export default function Main(props) {
-  const { userInfo, isLoggedIn } = useContext(CurrentUserContext);
+  const { userInfo } = useContext(CurrentUserContext);
 
   if (!props.contentIsLoaded) {
-    return <Preloader preloaderIsVisible={props.preloaderIsVisible} />;
+    return <Preloader />;
   }
 
   return (
@@ -20,10 +20,7 @@ export default function Main(props) {
             type='button'
             name='update-profile-photo-button'
             title='Изменить фотографию профиля'>
-            <button
-              className='profile__photo-overlay'
-              onClick={props.oneditAvatar}
-            />
+            <button className='profile__photo-overlay' onClick={props.oneditAvatar} />
             <img
               className='profile__photo'
               alt='Фотография пользователя.'

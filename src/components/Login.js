@@ -41,6 +41,7 @@ export default function Login(props) {
               required
               autoComplete='email'
               onChange={handleChanges}
+              value={credentials.email}
             />
           </div>
           <div className='form__input-container'>
@@ -53,6 +54,7 @@ export default function Login(props) {
               required
               autoComplete='current-password'
               onChange={handleChanges}
+              value={credentials.password}
             />
           </div>
         </fieldset>
