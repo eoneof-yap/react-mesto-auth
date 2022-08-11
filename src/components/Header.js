@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import closeButtonIcon from '../images/closeButton.svg';
 import menuButtonIcon from '../images/burger-menu-icon.svg';
 import { paths } from '../utils/constants.js';
 
-export default function Header({ email, onLogout, preloaderIsVisible }) {
+export default function Header({ onLogout }) {
+  const { userData } = useContext(CurrentUserContext);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const visibleMenuClass = isMenuOpen ? `${'header__menu_mobile'}` : '';
   const menuButtonBgImage = isMenuOpen
@@ -46,7 +49,7 @@ export default function Header({ email, onLogout, preloaderIsVisible }) {
             element={
               <>
                 <div className='header__email'>
-                  <span>{email}</span>
+                  <span>{userData.email}</span>
                 </div>
                 <button className='link header__link' onClick={handleSignOut}>
                   Выйти
@@ -58,10 +61,7 @@ export default function Header({ email, onLogout, preloaderIsVisible }) {
             exact
             path={paths.register}
             element={
-              <Link
-                to={paths.login}
-                className='link header__link'
-                onClick={toggleMenu}>
+              <Link to={paths.login} className='link header__link' onClick={toggleMenu}>
                 Войти
               </Link>
             }
