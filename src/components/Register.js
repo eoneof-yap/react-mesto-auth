@@ -42,6 +42,7 @@ export default function Register(props) {
               required
               autoComplete='email'
               onChange={handleChanges}
+              value={credentials.email}
             />
           </div>
           <div className='form__input-container'>
@@ -53,6 +54,7 @@ export default function Register(props) {
               required
               autoComplete='new-password'
               onChange={handleChanges}
+              value={credentials.password}
             />
           </div>
         </fieldset>
