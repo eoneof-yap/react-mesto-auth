@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Link, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import closeButtonIcon from '../images/closeButton.svg';
@@ -7,6 +7,8 @@ import menuButtonIcon from '../images/burger-menu-icon.svg';
 import { paths } from '../utils/constants.js';
 
 export default function Header({ onLogout }) {
+  const navigate = useNavigate();
+
   const { userData } = useContext(CurrentUserContext);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,7 +29,12 @@ export default function Header({ onLogout }) {
   return (
     <header className='header'>
       <div className='header__actions'>
-        <Link to={paths.root} className='header__logo' />
+        <button
+          onClick={() => {
+            navigate(paths.root);
+          }}
+          className='link header__logo'
+        />
         <button
           className='button header__menu-button'
           type='button'
@@ -51,7 +58,12 @@ export default function Header({ onLogout }) {
                 <div className='header__email'>
                   <span>{userData.email}</span>
                 </div>
-                <button className='link header__link' onClick={handleSignOut}>
+                <button
+                  className='link header__link'
+                  onClick={() => {
+                    toggleMenu();
+                    handleSignOut();
+                  }}>
                   Выйти
                 </button>
               </>
@@ -61,21 +73,28 @@ export default function Header({ onLogout }) {
             exact
             path={paths.register}
             element={
-              <Link to={paths.login} className='link header__link' onClick={toggleMenu}>
+              <button
+                onClick={() => {
+                  toggleMenu();
+                  navigate(paths.login, { replace: true });
+                }}
+                className='link header__link'>
                 Войти
-              </Link>
+              </button>
             }
           />
           <Route
             exact
             path={paths.login}
             element={
-              <Link
-                to={paths.register}
+              <button
                 className='link header__link'
-                onClick={toggleMenu}>
+                onClick={() => {
+                  toggleMenu();
+                  navigate(paths.register, { replace: true });
+                }}>
                 Регистрация
-              </Link>
+              </button>
             }
           />
         </Routes>
