@@ -14,7 +14,7 @@ import Card from './Card.js';
 import AuthForm from './AuthForm.js';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import { ProtectedRoutes } from './ProtectedRoutes.js';
+import { ProtectedRoutes, UserProtectedRoutes } from './ProtectedRoutes.js';
 
 export default function App() {
   const popupsStates = {
@@ -35,7 +35,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [userInfo, setUserInfo] = useState({}); // from Api.js
   const [userData, setUserData] = useState({}); // from auth.js
-  
+
   const navigate = useNavigate();
 
   const api = new Api(apiConfig);
@@ -280,16 +280,18 @@ export default function App() {
           </Route>
 
           {/* PUBLIC ROUTES */}
-          <Route
-            exact
-            path={`${paths.register}/*`}
-            element={<AuthForm onSubmit={handleRegister} formType='register' />}
-          />
-          <Route
-            exact
-            path={`${paths.login}/*`}
-            element={<AuthForm onSubmit={handleLogin} formType='login' />}
-          />
+          <Route element={<UserProtectedRoutes redirectTo={paths.root} />}>
+            <Route
+              exact
+              path={`${paths.register}/*`}
+              element={<AuthForm onSubmit={handleRegister} formType='register' />}
+            />
+            <Route
+              exact
+              path={`${paths.login}/*`}
+              element={<AuthForm onSubmit={handleLogin} formType='login' />}
+            />
+          </Route>
         </Routes>
         <Footer />
         <Popups
