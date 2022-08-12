@@ -77,7 +77,9 @@ export default function AuthForm({ onSubmit, formType }) {
             Уже зарегистрированы?
             <button
               className='link form__link_link'
-              onClick={navigate(paths.login, { replace: true })}>
+              onClick={() => {
+                navigate(paths.login);
+              }}>
               Войти
             </button>
           </div>
