@@ -4,15 +4,14 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import Api from '../utils/Api.js';
 import * as auth from '../utils/auth.js';
 import * as utils from '../utils/utils.js';
-import * as consts from '../utils/constants.js';
+import { paths, apiConfig } from '../utils/constants.js';
 
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import Popups from './Popups.js';
 import Card from './Card.js';
-import Login from './Login.js';
-import Register from './Register.js';
+import AuthForm from './AuthForm.js';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import { ProtectedRoutes } from './ProtectedRoutes.js';
@@ -36,9 +35,10 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [userInfo, setUserInfo] = useState({}); // from Api.js
   const [userData, setUserData] = useState({}); // from auth.js
+  
   const navigate = useNavigate();
 
-  const api = new Api(consts.apiConfig);
+  const api = new Api(apiConfig);
 
   function getAllData() {
     Promise.all([api.getUserInfo(), api.getCardsList()])
@@ -148,7 +148,7 @@ export default function App() {
         if (token) {
           localStorage.setItem('jwt', token);
           setIsLoggedIn(true); // triggers redirect in useEffect
-          navigate(consts.paths.root);
+          navigate(paths.root, { replace: true });
         }
       })
       .catch((err) => {
@@ -181,7 +181,7 @@ export default function App() {
   function handleLogout() {
     localStorage.removeItem('jwt');
     setIsLoggedIn(false);
-    navigate(consts.paths.login);
+    navigate(paths.login, { replace: true });
   }
 
   function updateOpenedState(key, value) {
@@ -201,7 +201,7 @@ export default function App() {
   function handleTooltipClose(type) {
     closeAllPopups();
     if (type === 'success') {
-      navigate(consts.paths.login);
+      navigate(paths.login, { replace: true });
     }
   }
 
@@ -240,7 +240,7 @@ export default function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate(consts.paths.root);
+      navigate(paths.root, { replace: true });
       getAllData();
     }
     checkToken();
@@ -255,12 +255,12 @@ export default function App() {
       <div className='page'>
         <Header onLogout={handleLogout} />
         <Routes>
-          <Route element={<ProtectedRoutes redirectTo={consts.paths.login} />}>
-            <Route path={consts.paths.any} />
+          <Route element={<ProtectedRoutes redirectTo={paths.login} />}>
+            <Route path={paths.any} />
 
             <Route
               exact
-              path={consts.paths.root}
+              path={paths.root}
               element={
                 <Main
                   contentIsLoaded={contentIsLoaded}
@@ -281,10 +281,15 @@ export default function App() {
 
           {/* PUBLIC ROUTES */}
           <Route
-            path={consts.paths.register}
-            element={<Register onSubmit={handleRegister} />}
+            exact
+            path={`${paths.register}/*`}
+            element={<AuthForm onSubmit={handleRegister} formType='register' />}
           />
-          <Route path={consts.paths.login} element={<Login onSubmit={handleLogin} />} />
+          <Route
+            exact
+            path={`${paths.login}/*`}
+            element={<AuthForm onSubmit={handleLogin} formType='login' />}
+          />
         </Routes>
         <Footer />
         <Popups
