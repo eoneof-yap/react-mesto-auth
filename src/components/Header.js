@@ -76,7 +76,7 @@ export default function Header({ onLogout }) {
               <button
                 onClick={() => {
                   toggleMenu();
-                  navigate(paths.login, { replace: true });
+                  navigate(paths.login);
                 }}
                 className='link header__link'>
                 Войти
@@ -91,7 +91,7 @@ export default function Header({ onLogout }) {
                 className='link header__link'
                 onClick={() => {
                   toggleMenu();
-                  navigate(paths.register, { replace: true });
+                  navigate(paths.register);
                 }}>
                 Регистрация
               </button>
